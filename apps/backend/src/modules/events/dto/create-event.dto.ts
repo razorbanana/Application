@@ -3,5 +3,5 @@ export class CreateEventDto {
     description: string
     location: string
     eventDate: Date
-    capacity: number
+    capacity?: number
 }

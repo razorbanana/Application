@@ -18,7 +18,7 @@ export class Event {
     @CreateDateColumn({name: 'event_date'})
     eventDate: Date
 
-    @Column('int')
+    @Column('int', {nullable: true, default: null})
     capacity: number
 
     @OneToMany(() => Participant, (participant) => participant.event)

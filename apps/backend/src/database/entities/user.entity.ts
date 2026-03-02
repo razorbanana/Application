@@ -18,7 +18,7 @@ export class User {
     @Column()
     fullName: string
 
-    @Column()
+    @Column({nullable: true, default: null})
     city: string
 
     @OneToMany(() => Participant, (participant) => participant.user)
