@@ -6,15 +6,16 @@ import { JoinEventDto } from './dto/join-event.dto';
 import { Repository } from 'typeorm';
 import { Event } from 'src/database/entities/event.entity';
 import { Participant } from 'src/database/entities/participant.entity';
+import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY } from 'src/constants';
 
 @Injectable()
 export class EventsService {
 
   constructor(
-    @Inject("EVENTS_REPOSITORY")
+    @Inject(EVENTS_REPOSITORY)
     private eventsRepository: Repository<Event>,
 
-    @Inject("PARTICIPANTS_REPOSITORY")
+    @Inject(PARTICIPANTS_REPOSITORY)
     private participantsRepository: Repository<Participant>
   ){}
 

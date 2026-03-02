@@ -1,10 +1,11 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv'
+import { DATA_SOURCE } from 'src/constants';
 dotenv.config()
 
 export const databaseProviders = [
   {
-    provide: 'DATA_SOURCE',
+    provide: DATA_SOURCE,
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'postgres',
