@@ -12,24 +12,28 @@ import { joinEventSchema } from './schemas/join-event.schema';
 import { leaveEventSchema } from './schemas/leave-event.schema';
 import { createEventSchema } from './schemas/create-event.schema';
 import { updateEventSchema } from './schemas/update-event.schema';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @UseGuards(AuthGuard)
+  @ApiBody({type: CreateEventDto})
   @Post()
   async create(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(createEventSchema)) createEventDto: CreateEventDto) {
     return await this.eventsService.create(user.sub, createEventDto);
   }
 
   @UseGuards(AuthGuard)
+  @ApiBody({type: JoinEventDto})
   @Post(':id/join')
   async join(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(joinEventSchema)) joinEventDto: JoinEventDto) {
     return await this.eventsService.join(user.sub, joinEventDto);
   }
 
   @UseGuards(AuthGuard)
+  @ApiBody({type: LeaveEventDto})
   @Post(':id/leave')
   async leave(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(leaveEventSchema)) leaveEventDto: LeaveEventDto) {
     return await this.eventsService.leave(user.sub, leaveEventDto);
@@ -46,6 +50,7 @@ export class EventsController {
   }
 
   @Patch(':id')
+  @ApiBody({type: UpdateEventDto})
   async update(@Param('id') id: string, @Body(new YupValidationPipe(updateEventSchema)) updateEventDto: UpdateEventDto) {
     return await this.eventsService.update(id, updateEventDto);
   }
