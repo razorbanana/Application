@@ -1,1 +1,3 @@
-export class LeaveEventDto{}
+export class LeaveEventDto{
+    eventId: string
+}

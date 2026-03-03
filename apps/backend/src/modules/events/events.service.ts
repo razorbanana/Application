@@ -19,17 +19,26 @@ export class EventsService {
     private participantsRepository: Repository<Participant>
   ){}
 
-  async create(createEventDto: CreateEventDto) {
-    const event = this.eventsRepository.create(createEventDto);
-    return await this.eventsRepository.save(event)
+  async create(userId: string, createEventDto: CreateEventDto) {
+    const event = await this.eventsRepository.save(this.eventsRepository.create(createEventDto))
+    this.participantsRepository.create({userId, eventId: event.id, userRole: "organizer"})
+    return event
   }
 
-  async join(joinEventDto: JoinEventDto) {
-    return this.participantsRepository.create(joinEventDto);
+  async join(userId: string, joinEventDto: JoinEventDto) {
+    const participant = this.participantsRepository.create({
+      ...joinEventDto,
+      userId,
+    });
+
+    return this.participantsRepository.save(participant);
   }
   
-  async leave(leaveEventDto: LeaveEventDto) {
-    return this.participantsRepository.create(leaveEventDto);
+  async leave(userId: string, leaveEventDto: LeaveEventDto) {
+    return this.participantsRepository.delete({
+      userId,
+      eventId: leaveEventDto.eventId
+    });
   }
 
   async findAll(): Promise<Event[]> {

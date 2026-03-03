@@ -1,27 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { LeaveEventDto } from './dto/leave-event.dto';
 import { JoinEventDto } from './dto/join-event.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { GetUser } from 'src/utils/decorators/getUser.decorator';
+import type { JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import { YupValidationPipe } from 'src/utils/pipes/yup.pipe';
+import { joinEventSchema } from './schemas/join-event.schema';
+import { leaveEventSchema } from './schemas/leave-event.schema';
+import { createEventSchema } from './schemas/create-event.schema';
+import { updateEventSchema } from './schemas/update-event.schema';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  async create(@Body() createEventDto: CreateEventDto) {
-    return await this.eventsService.create(createEventDto);
+  async create(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(createEventSchema)) createEventDto: CreateEventDto) {
+    return await this.eventsService.create(user.sub, createEventDto);
   }
 
+  @UseGuards(AuthGuard)
   @Post(':id/join')
-  async join(@Body() joinEventDto: JoinEventDto) {
-    return await this.eventsService.join(joinEventDto);
+  async join(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(joinEventSchema)) joinEventDto: JoinEventDto) {
+    return await this.eventsService.join(user.sub, joinEventDto);
   }
 
+  @UseGuards(AuthGuard)
   @Post(':id/leave')
-  async leave(@Body() leaveEventDto: LeaveEventDto) {
-    return await this.eventsService.leave(leaveEventDto);
+  async leave(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(leaveEventSchema)) leaveEventDto: LeaveEventDto) {
+    return await this.eventsService.leave(user.sub, leaveEventDto);
   }
 
   @Get()
@@ -35,7 +46,7 @@ export class EventsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+  async update(@Param('id') id: string, @Body(new YupValidationPipe(updateEventSchema)) updateEventDto: UpdateEventDto) {
     return await this.eventsService.update(id, updateEventDto);
   }
 
