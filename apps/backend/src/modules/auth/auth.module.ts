@@ -1,11 +1,23 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
+import { JwtModule} from '@nestjs/jwt';
+import dotenv from 'dotenv'
+import { AuthGuard } from './auth.guard';
+dotenv.config()
 
 @Module({
-  imports: [UsersModule],
+  imports: [
+    forwardRef(() => UsersModule),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET || 'they will never know',
+      signOptions: {expiresIn: '30m'}
+    })
+  ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
+  exports: [AuthGuard]
 })
 export class AuthModule {}

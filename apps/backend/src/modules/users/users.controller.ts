@@ -1,12 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { AuthGuard } from '../auth/auth.guard';
+import { GetUser } from 'src/utils/decorators/getUser.decorator';
+import type { JwtPayload } from 'src/utils/decorators/getUser.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+  ) {}
 
+  @UseGuards(AuthGuard)
   @Get('me/events')
-  async findMyEvents(@Param('id') id: string) {
-    return await this.usersService.findMyEvents(id);
+  async findMyEvents(@GetUser() user: JwtPayload) {
+    return await this.usersService.findMyEvents(user.sub);
   }
 }

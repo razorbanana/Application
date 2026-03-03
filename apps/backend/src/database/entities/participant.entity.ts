@@ -6,18 +6,18 @@ export type UserRole = 'visitor' | 'organizer'
 
 @Entity()
 export class Participant {
-    @PrimaryColumn('uuid', {name: "user_id"})
+    @PrimaryColumn('uuid')
     userId: string;
 
-    @PrimaryColumn('uuid', {name: "event_id"})
+    @PrimaryColumn('uuid')
     eventId: string;
 
     @ManyToOne(()=>User, (user) => user.events, {onDelete: "CASCADE"})
-    @JoinTable({name: "user_id"})
+    @JoinTable({name: "userId"})
     user: User
 
     @ManyToOne(()=>Event, (event) => event.participants, {onDelete: "CASCADE"})
-    @JoinTable({name: "event_id"})
+    @JoinTable({name: "eventId"})
     event: Event
 
     @Column()

@@ -1,5 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeUpdate, BeforeInsert } from "typeorm";
 import { Participant } from "./participant.entity";
+import { Exclude } from "class-transformer";
+import * as bcrypt from 'bcrypt'
+import dotenv from 'dotenv'
+dotenv.config()
 
 @Entity()
 export class User {
@@ -12,8 +16,18 @@ export class User {
     @Column({unique: true})
     email: string
 
+    @Exclude()
     @Column()
-    password: string
+    password!: string
+    
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword(){
+        if (this.password){
+            const saltRounds = parseInt(process.env.SALT_ROUNDS || '12', 10);
+            this.password = await bcrypt.hash(this.password, saltRounds)
+        }
+    }
 
     @Column()
     fullName: string

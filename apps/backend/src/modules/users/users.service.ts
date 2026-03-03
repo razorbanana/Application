@@ -16,4 +16,11 @@ export class UsersService {
   async findMyEvents(id: string) {
     return this.eventsService.findUserEvents(id)
   }
+
+  async findByNameOrEmail(credentials: string){
+    return await this.usersRepository.findOne({where: [
+      {username: credentials},
+      {email: credentials}
+    ]})
+  }
 }

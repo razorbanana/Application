@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv'
-import { DATA_SOURCE } from 'src/constants';
+import { DATA_SOURCE } from '.././constants';
 dotenv.config()
 
 export const databaseProviders = [

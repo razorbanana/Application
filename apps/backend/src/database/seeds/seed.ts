@@ -3,7 +3,6 @@ import { databaseProviders } from "../database.providers";
 import { Participant } from "../entities/participant.entity";
 import { User } from "../entities/user.entity";
 import { RegisterDto } from "src/modules/auth/dto/register.dto";
-import { DeepPartial } from "typeorm";
 import { Event } from "../entities/event.entity";
 import { JoinEventDto } from "src/modules/events/dto/join-event.dto";
 
@@ -37,7 +36,17 @@ async function seed(){
         }
     ]
 
-    const users = await userRepo.save(userRepo.create(usersData))
+    const userEntities: User[] = []
+    for (const user of usersData) {
+        const result = userRepo.create(user);
+        userEntities.push(result)
+    }
+     
+    const users: User[] = []
+    for (const user of userEntities) {
+        const result = await userRepo.save(user);
+        users.push(result)
+    }
 
     const eventsData: CreateEventDto[] = [
         {
