@@ -1,4 +1,4 @@
-import { forwardRef, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UsersService } from '../users/users.service';
@@ -23,13 +23,24 @@ export class AuthService {
     if (!result){
       throw new UnauthorizedException("we have checked and this password is very incorrect")
     }
-    const payload = {sub: user.id, username: user.username}
+    const payload = {
+      sub: user.id, 
+      username: user.username
+    }
     return {
       access_token: await this.jwtService.signAsync(payload)
     }
   }
 
   async register(registerDto: RegisterDto) {
-    return `register`;
+    const user = await this.usersService.create(registerDto)
+    const payload = {
+      sub: user.id, 
+      username: user.username
+    }
+    return {
+      access_token: await this.jwtService.signAsync(payload)
+    }
   }
+
 }
