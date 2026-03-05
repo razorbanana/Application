@@ -30,4 +30,5 @@ export class Event {
 
 export interface EventWithVisitorCount extends Event {
   visitorCount: number;
+  isJoined: boolean
 }

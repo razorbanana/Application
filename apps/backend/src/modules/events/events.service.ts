@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Event, type EventWithVisitorCount } from 'src/database/entities/event.entity';
 import { Participant } from 'src/database/entities/participant.entity';
 import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY } from 'src/constants';
+import { JwtPayload } from 'src/utils/decorators/getUser.decorator';
 
 @Injectable()
 export class EventsService {
@@ -45,19 +46,34 @@ export class EventsService {
     return this.eventsRepository.find()
   }
 
-  async findAllWithVisitorCount(): Promise<EventWithVisitorCount[]> {
-    const query = this.eventsRepository
-    .createQueryBuilder('event')
-    .leftJoin('event.participants', 'participant', 'participant.userRole = :role', {role: "visitor"})
+  async findAllWithVisitorCount(userId?:string): Promise<EventWithVisitorCount[]> {
+    const query = this.eventsRepository.createQueryBuilder('event')
+
+    if (!userId){
+      query.where('event.isPublic = :isPublic', { isPublic: true })
+    }
+
+    query.leftJoin('event.participants', 'participant', 'participant.userRole = :role', {role: "visitor"})
     .select('event.*') 
     .addSelect('COUNT(participant.userId)::int', 'visitorCount') 
     .groupBy('event.id');
+
+    if (userId) {
+      query.addSelect(
+        `EXISTS(
+          SELECT 1 FROM participant p 
+          WHERE p."eventId" = event.id AND p."userId" = :userId
+        )`, 
+        'isJoined'
+      ).setParameter('userId', userId);
+    }
 
     const rawResults = await query.getRawMany();
 
     return rawResults.map(result => ({
       ...result,
-      visitorCount: parseInt(result.visitorCount, 10) 
+      visitorCount: parseInt(result.visitorCount, 10),
+      isJoined: result.isJoined === true || result.isJoined === 'true'
     }));
   }
 

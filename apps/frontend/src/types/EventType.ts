@@ -7,4 +7,5 @@ export type EventType = {
     capacity: number
     visitorCount: number
     public: boolean
+    isJoined: boolean
 }
