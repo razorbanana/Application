@@ -19,7 +19,7 @@ export default function Navbar(){
 
         <div className="h-8 w-px bg-gray-300" />
 
-        <NavItem to="/my/profile" icon={<User />} label={user || "log in"}/>
+        <NavItem to="/my/profile" icon={<User />} label={user || "Log in"}/>
         <NavItem to="/" variant="red" icon={<LogOut />} beforeNavigate={logout}/>
       </div>
     </nav>
