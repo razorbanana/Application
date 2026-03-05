@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToOne, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToOne, JoinTable, JoinColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Event } from "./event.entity";
 
@@ -13,11 +13,11 @@ export class Participant {
     eventId: string;
 
     @ManyToOne(()=>User, (user) => user.events, {onDelete: "CASCADE"})
-    @JoinTable({name: "userId"})
+    @JoinColumn({name: "userId"})
     user: User
 
     @ManyToOne(()=>Event, (event) => event.participants, {onDelete: "CASCADE"})
-    @JoinTable({name: "eventId"})
+    @JoinColumn({name: "eventId"})
     event: Event
 
     @Column()

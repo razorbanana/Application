@@ -4,7 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { LeaveEventDto } from './dto/leave-event.dto';
 import { JoinEventDto } from './dto/join-event.dto';
 import { Repository } from 'typeorm';
-import { Event } from 'src/database/entities/event.entity';
+import { Event, type EventWithVisitorCount } from 'src/database/entities/event.entity';
 import { Participant } from 'src/database/entities/participant.entity';
 import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY } from 'src/constants';
 
@@ -43,6 +43,22 @@ export class EventsService {
 
   async findAll(): Promise<Event[]> {
     return this.eventsRepository.find()
+  }
+
+  async findAllWithVisitorCount(): Promise<EventWithVisitorCount[]> {
+    const query = this.eventsRepository
+    .createQueryBuilder('event')
+    .leftJoin('event.participants', 'participant', 'participant.userRole = :role', {role: "visitor"})
+    .select('event.*') 
+    .addSelect('COUNT(participant.userId)::int', 'visitorCount') 
+    .groupBy('event.id');
+
+    const rawResults = await query.getRawMany();
+
+    return rawResults.map(result => ({
+      ...result,
+      visitorCount: parseInt(result.visitorCount, 10) 
+    }));
   }
 
   async findOne(id: string) {

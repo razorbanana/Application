@@ -41,7 +41,7 @@ export class EventsController {
 
   @Get()
   async findAll() {
-    return await this.eventsService.findAll();
+    return await this.eventsService.findAllWithVisitorCount();
   }
 
   @Get(':id')

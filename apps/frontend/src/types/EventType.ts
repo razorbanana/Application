@@ -5,4 +5,6 @@ export type EventType = {
     location: string
     eventDate: Date
     capacity: number
+    visitorCount: number
+    public: boolean
 }
