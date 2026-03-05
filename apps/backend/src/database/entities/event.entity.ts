@@ -21,6 +21,9 @@ export class Event {
     @Column('int', {nullable: true, default: null})
     capacity: number
 
+    @Column({ type: 'boolean', default: true })
+    isPublic: boolean;
+
     @OneToMany(() => Participant, (participant) => participant.event)
     participants: Participant[]
 }

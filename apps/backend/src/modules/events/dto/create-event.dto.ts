@@ -31,4 +31,11 @@ export class CreateEventDto {
     required: false 
   })
   capacity?: number;
+
+  @ApiProperty({
+    example: true,
+    description: 'Visibility of the event for unauthenticated users', 
+    required: false
+  })
+  isPublic?: boolean
 }
