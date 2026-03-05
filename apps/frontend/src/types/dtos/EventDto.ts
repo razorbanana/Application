@@ -1,4 +1,4 @@
-export type EventType = {
+export type EventDto = {
     id: string;
     name: string;
     description: string

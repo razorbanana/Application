@@ -16,7 +16,7 @@ export const fetchAllEvents = createAsyncThunk(
     "events/fetchAll",
     async () => {
         const response = await getAllEvents()
-        return response.data
+        return response
     }
 )
 
