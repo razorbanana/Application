@@ -27,8 +27,3 @@ export class Event {
     @OneToMany(() => Participant, (participant) => participant.event)
     participants: Participant[]
 }
-
-export interface EventWithVisitorCount extends Event {
-  visitorCount: number;
-  isJoined: boolean
-}

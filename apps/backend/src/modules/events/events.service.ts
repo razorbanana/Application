@@ -4,10 +4,11 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { LeaveEventDto } from './dto/leave-event.dto';
 import { JoinEventDto } from './dto/join-event.dto';
 import { Repository } from 'typeorm';
-import { Event, type EventWithVisitorCount } from 'src/database/entities/event.entity';
+import { Event } from 'src/database/entities/event.entity';
 import { Participant } from 'src/database/entities/participant.entity';
 import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY } from 'src/constants';
 import { JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import { EventWithVisitorCount } from './dto/responseDto/eventWithVisitorCount';
 
 @Injectable()
 export class EventsService {
@@ -32,11 +33,11 @@ export class EventsService {
       userId,
     });
 
-    return this.participantsRepository.save(participant);
+    this.participantsRepository.save(participant);
   }
   
   async leave(userId: string, leaveEventDto: LeaveEventDto) {
-    return this.participantsRepository.delete({
+    this.participantsRepository.delete({
       userId,
       eventId: leaveEventDto.eventId
     });

@@ -12,8 +12,10 @@ import { joinEventSchema } from './schemas/join-event.schema';
 import { leaveEventSchema } from './schemas/leave-event.schema';
 import { createEventSchema } from './schemas/create-event.schema';
 import { updateEventSchema } from './schemas/update-event.schema';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../auth/guards/optional.guard';
+import { EventResponseDto } from './dto/responseDto/eventResponse.dto';
+import { EventWithVisitorCount } from './dto/responseDto/eventWithVisitorCount';
 
 @Controller('events')
 export class EventsController {
@@ -21,6 +23,10 @@ export class EventsController {
 
   @UseGuards(AuthGuard)
   @ApiBody({type: CreateEventDto})
+  @ApiOkResponse({
+    description: 'The event has been successfully created.',
+    type: EventResponseDto
+  })
   @Post()
   async create(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(createEventSchema)) createEventDto: CreateEventDto) {
     return await this.eventsService.create(user.sub, createEventDto);
@@ -28,36 +34,58 @@ export class EventsController {
 
   @UseGuards(AuthGuard)
   @ApiBody({type: JoinEventDto})
+  @ApiOkResponse({
+    description: 'The user has successfully joined the event.'
+  })
   @Post(':id/join')
   async join(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(joinEventSchema)) joinEventDto: JoinEventDto) {
-    return await this.eventsService.join(user.sub, joinEventDto);
+    await this.eventsService.join(user.sub, joinEventDto);
   }
 
   @UseGuards(AuthGuard)
   @ApiBody({type: LeaveEventDto})
+  @ApiOkResponse({
+    description: 'The user has successfully left the event.', 
+  })
   @Post(':id/leave')
   async leave(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(leaveEventSchema)) leaveEventDto: LeaveEventDto) {
-    return await this.eventsService.leave(user.sub, leaveEventDto);
+    await this.eventsService.leave(user.sub, leaveEventDto);
   }
 
   @UseGuards(OptionalAuthGuard)
+  @ApiOkResponse({
+    description: 'Returns a list of all events with visitor counts and participation status.',
+    type: [EventWithVisitorCount]
+  })
   @Get()
   async findAll(@GetUser() user?: JwtPayload) {
     const userId = user ? user.sub : undefined
     return await this.eventsService.findAllWithVisitorCount(userId);
   }
 
+  @ApiOkResponse({
+    description: 'Returns details of a specific event.',
+    type: EventResponseDto
+  })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.eventsService.findOne(id);
   }
 
-  @Patch(':id')
   @ApiBody({type: UpdateEventDto})
+  @ApiOkResponse({
+    description: 'The event has been successfully updated.',
+    type: EventResponseDto
+  })
+  @Patch(':id')
   async update(@Param('id') id: string, @Body(new YupValidationPipe(updateEventSchema)) updateEventDto: UpdateEventDto) {
     return await this.eventsService.update(id, updateEventDto);
   }
 
+  @ApiOkResponse({
+    description: 'The event has been successfully deleted.',
+    type: EventResponseDto
+  })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.eventsService.remove(id);
