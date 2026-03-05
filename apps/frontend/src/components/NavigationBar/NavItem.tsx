@@ -10,7 +10,7 @@ type NavItemProps = {
 }
 
 export function NavItem ({to, label, variant = "nav", icon, beforeNavigate}: NavItemProps){
-    const baseClasses = "transition-colors duration-200 flex items-center gap-2 font-medium";
+    const baseClasses = "transition-colors duration-200 flex items-center gap-2 font-medium p-1";
     const styles = {
         nav: "text-gray-700 hover:text-blue-600",
         red: "px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm",
@@ -21,7 +21,7 @@ export function NavItem ({to, label, variant = "nav", icon, beforeNavigate}: Nav
         <NavLink 
             to={to}
             onClick={beforeNavigate}
-            className={({isActive})=>`${baseClasses} ${styles[variant]} ${isActive && variant == "nav" ? "text-blue-600 pb-2 border-b-2 border-blue-600" : ""}`}
+            className={({isActive})=>`${baseClasses} ${styles[variant]} ${isActive && variant == "nav" ? "text-blue-600 pb-2 border-b-2 border-blue-600 w-fit" : ""}`}
         >
             {icon}
             {label}
