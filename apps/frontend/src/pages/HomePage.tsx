@@ -15,7 +15,7 @@ export default function HomePage(){
     )
 
     useEffect(() => {
-        dispatch(fetchAllEvents())
+        if (events.length === 0) dispatch(fetchAllEvents())
     }, [dispatch])
 
     return(
