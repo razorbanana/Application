@@ -13,7 +13,7 @@ export async function login({identifier, password}: LoginRequestDto): Promise<Lo
 }
 
 export async function register( details: RegisterRequestDto ): Promise<LoginResponseDto>{
-    const response = await api.post<LoginResponseDto>(`/auth/login`, details)
+    const response = await api.post<LoginResponseDto>(`/auth/register`, details)
     return response.data
 }
 

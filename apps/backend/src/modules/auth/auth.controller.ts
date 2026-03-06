@@ -25,7 +25,6 @@ export class AuthController {
   })
   @Post('register')
   register(@Body(new YupValidationPipe(registerScheme)) registerDto: RegisterDto) {
-    console.log(registerDto);
     return this.authService.register(registerDto);
   }
 
