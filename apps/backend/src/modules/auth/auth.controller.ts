@@ -13,8 +13,15 @@ export class AuthController {
 
   @ApiBody({type: RegisterDto})
   @ApiOkResponse({
-    description: "JWT token is returned",
-    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3MjczMTEwMiwiZXhwIjoxNzcyNzMyOTAyfQ.mXXV-M9GlxRXQu5uhbHk4vX8cPc-LnAXqzVyICs8NQA"
+    description: "JWT token and user object are returned",
+    example: {
+      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3Mjc5NTc3OSwiZXhwIjoxNzcyNzk3NTc5fQ.V7Plbln8eR-YSHwYy5JJ8Pev4BF6tx1Hr-L0z4Mt-oI",
+    user: {
+        username: "benlee",
+        email: "ben.lee@example.com",
+        fullName: "Benjamin Lee",
+        city: "New York"
+    }}
   })
   @Post('register')
   register(@Body(new YupValidationPipe(registerScheme)) registerDto: RegisterDto) {
@@ -24,8 +31,15 @@ export class AuthController {
 
   @Post('login')
   @ApiOkResponse({
-    description: "JWT token is returned",
-    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3MjczMTEwMiwiZXhwIjoxNzcyNzMyOTAyfQ.mXXV-M9GlxRXQu5uhbHk4vX8cPc-LnAXqzVyICs8NQA"
+    description: "JWT token and user object are returned",
+    example: {
+      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3Mjc5NTc3OSwiZXhwIjoxNzcyNzk3NTc5fQ.V7Plbln8eR-YSHwYy5JJ8Pev4BF6tx1Hr-L0z4Mt-oI",
+    user: {
+        username: "benlee",
+        email: "ben.lee@example.com",
+        fullName: "Benjamin Lee",
+        city: "New York"
+    }}
   })
   @ApiBody({type: LoginDto})
   login(@Body(new YupValidationPipe(loginSchema)) loginDto: LoginDto) {

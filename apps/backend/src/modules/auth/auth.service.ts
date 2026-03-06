@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { Inject } from '@nestjs/common';
+import LoginResponseDto from './dto/responseDto/loginResponse.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,8 @@ export class AuthService {
     private jwtService: JwtService
   ){}
 
-  async login(loginDto: LoginDto) {
-    const user = await this.usersService.findByNameOrEmail(loginDto.credentials)
+  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
+    const user = await this.usersService.findByNameOrEmail(loginDto.identifier)
     if (!user){
       throw new NotFoundException("we did not find this user")
     }
@@ -27,19 +28,23 @@ export class AuthService {
       sub: user.id, 
       username: user.username
     }
+    const {id, password, ...userWithoutIdPassword} = user
     return {
-      access_token: await this.jwtService.signAsync(payload)
+      access_token: await this.jwtService.signAsync(payload),
+      user: userWithoutIdPassword
     }
   }
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<LoginResponseDto> {
     const user = await this.usersService.create(registerDto)
     const payload = {
       sub: user.id, 
       username: user.username
     }
+    const {id, password, ...userWithoutIdPassword} = user
     return {
-      access_token: await this.jwtService.signAsync(payload)
+      access_token: await this.jwtService.signAsync(payload),
+      user: userWithoutIdPassword
     }
   }
 

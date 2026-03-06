@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { EventType } from "../../types/EventType";
-import { getAllEvents, joinEventById } from "../../services/api";
+import { getAllEvents, joinEventById } from "../../services/eventsApi";
 
 type EventsState = {
     events: EventType[],

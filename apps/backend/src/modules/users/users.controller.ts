@@ -1,10 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { GetUser } from 'src/utils/decorators/getUser.decorator';
 import type { JwtPayload } from 'src/utils/decorators/getUser.decorator';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { EventResponseDto } from '../events/dto/responseDto/eventResponse.dto';
+import LoginResponseDto, { UserWithoutIdPassword } from '../auth/dto/responseDto/loginResponse.dto';
 
 @Controller('users')
 export class UsersController {
@@ -20,5 +21,15 @@ export class UsersController {
   @Get('me/events')
   async findMyEvents(@GetUser() user: JwtPayload) {
     return await this.usersService.findMyEvents(user.sub);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: "Returns a user object",
+    type: UserWithoutIdPassword
+  })
+  @Get('me')
+  async findMyUser(@GetUser() user: JwtPayload) {
+    return await this.usersService.findMyUser(user.sub);
   }
 }

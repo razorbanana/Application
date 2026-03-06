@@ -5,7 +5,7 @@ export class LoginDto {
     example: 'johndoe123', 
     description: 'Username or email of the user for authentication'
   })
-  credentials: string;
+  identifier: string;
 
   @ApiProperty({ 
     example: 'Str0ngP@ssword!', 
