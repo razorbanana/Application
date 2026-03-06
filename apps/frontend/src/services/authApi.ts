@@ -1,12 +1,11 @@
-import axios from "axios";
 import type { RegisterRequestDto } from "../types/dtos/requests/RegisterRequestDto";
 import type { LoginRequestDto } from "../types/dtos/requests/LoginRequestDto";
 import type { LoginResponseDto } from "../types/dtos/LoginResponseDto";
+import api from "./api";
 
-const apiUrl = import.meta.env.VITE_API_URL
 
 export async function login({identifier, password}: LoginRequestDto): Promise<LoginResponseDto>{
-    const response = await axios.post<LoginResponseDto>(`${apiUrl}/auth/login`, {
+    const response = await api.post<LoginResponseDto>(`/auth/login`, {
         identifier,
         password
     })
@@ -14,11 +13,11 @@ export async function login({identifier, password}: LoginRequestDto): Promise<Lo
 }
 
 export async function register( details: RegisterRequestDto ): Promise<LoginResponseDto>{
-    const response = await axios.post<LoginResponseDto>(`${apiUrl}/auth/login`, details)
+    const response = await api.post<LoginResponseDto>(`/auth/login`, details)
     return response.data
 }
 
 export async function fetchUser(){
-    const response = await axios.get(`${apiUrl}/users/me`)
+    const response = await api.get(`/users/me`)
     return response.data
 }

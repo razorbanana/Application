@@ -1,13 +1,11 @@
-import axios from "axios";
 import type { EventDto } from "../types/dtos/EventDto";
-
-const apiUrl = import.meta.env.VITE_API_URL
+import api from "./api";
 
 export async function getAllEvents(): Promise<EventDto[]>{
-    const response = await axios.get<EventDto[]>(`${apiUrl}/events`)
+    const response = await api.get<EventDto[]>(`/events`)
     return response.data
 }
 
 export async function joinEventById(eventId: string): Promise<void>{
-    await axios.post(`${apiUrl}/events/${eventId}/join`)
+    await api.post(`/events/${eventId}/join`)
 }

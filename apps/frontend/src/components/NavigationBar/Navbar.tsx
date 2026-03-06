@@ -1,13 +1,15 @@
-import { useAppSelector } from "../../app/store";
+import { useAppDispatch, useAppSelector } from "../../app/store";
 import { NavItem } from "./NavItem";
 import { List, Calendar, Plus, LogOut, User } from "lucide-react";
+import { logout } from "../../app/slices/authSlice";
 
 export default function Navbar(){
 
   const user = useAppSelector(state => state.auth.user)
+  const dispatch = useAppDispatch()
 
-  function logout () {
-    alert("You are logging out")
+  function handleLogout () {
+    dispatch(logout())
   }
 
   return (
@@ -20,9 +22,9 @@ export default function Navbar(){
 
         <div className="h-8 w-px bg-gray-300" />
 
-        <NavItem to={user !== null ? "/my/profile" : "/login"} icon={<User />} label={user || "Log in"}/>
+        <NavItem to={user !== null ? "/my/profile" : "/login"} icon={<User />} label={user?.username || "Log in"}/>
         {
-          user !== null && <NavItem to="/" variant="red" icon={<LogOut />} beforeNavigate={logout}/>
+          user !== null && <NavItem to="/" variant="red" icon={<LogOut />} beforeNavigate={handleLogout}/>
         }
       </div>
     </nav>

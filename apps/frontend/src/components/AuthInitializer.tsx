@@ -7,7 +7,6 @@ export const AuthInitializer = () => {
     const token = localStorage.getItem('token')
 
     useEffect(()=>{
-        console.log(token)
         token && dispatch(fetchCurrentUser())
     }, [dispatch, token])
 

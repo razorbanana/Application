@@ -10,7 +10,7 @@ type NavItemProps = {
 }
 
 export function NavItem ({to, label, variant = "nav", icon, beforeNavigate}: NavItemProps){
-    const baseClasses = "transition-colors duration-200 flex items-center gap-2 font-medium p-1";
+    const baseClasses = "transition-colors duration-200 flex items-center gap-2 font-medium p-1 cursor-pointer";
     const styles = {
         nav: "text-gray-700 hover:text-blue-600",
         red: "px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm",
