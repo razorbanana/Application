@@ -4,11 +4,11 @@ import { fetchCurrentUser } from "../app/slices/authSlice"
 
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
-    const token = localStorage.getItem('token')
+    const access_token = localStorage.getItem('access_token')
 
     useEffect(()=>{
-        token && dispatch(fetchCurrentUser())
-    }, [dispatch, token])
+        access_token && dispatch(fetchCurrentUser())
+    }, [dispatch, access_token])
 
     return null
 }

@@ -3,7 +3,6 @@ import type { LoginRequestDto } from "../types/dtos/requests/LoginRequestDto";
 import type { LoginResponseDto } from "../types/dtos/LoginResponseDto";
 import api from "./api";
 
-
 export async function login({identifier, password}: LoginRequestDto): Promise<LoginResponseDto>{
     const response = await api.post<LoginResponseDto>(`/auth/login`, {
         identifier,

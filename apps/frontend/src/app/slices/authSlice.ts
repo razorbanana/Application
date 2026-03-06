@@ -11,9 +11,11 @@ interface AuthState {
   error: string | null;
 }
 
+const tokenFromStorage = localStorage.getItem("access_token");
+
 const initialState: AuthState = {
     user: null,
-    access_token: localStorage.getItem('access_token'),
+    access_token: tokenFromStorage,
     status: 'idle',
     error: null,
 }
@@ -43,7 +45,7 @@ export const registerUser = createAsyncThunk(
 )
 
 export const fetchCurrentUser = createAsyncThunk(
-    "auth/getchCurrentUser",
+    "auth/fetchCurrentUser",
     async () => {
         try{
             const data = await fetchUser()
@@ -63,6 +65,10 @@ export const authSlice = createSlice({
             state.user = null
             localStorage.removeItem('token')
         },
+        pullTokenFromStorage: (state) => {
+            const token = localStorage.getItem("access_token")
+            state.access_token = token ? token : null
+        },
         refreshToken: () => {}
     },
     extraReducers: (builder) => {
@@ -70,7 +76,7 @@ export const authSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.access_token = action.payload.access_token
                 state.user = action.payload.user
-                localStorage.setItem('token', action.payload.access_token)
+                localStorage.setItem('access_token', action.payload.access_token)
                 state.status = "succeeded"
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -80,7 +86,7 @@ export const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.access_token = action.payload.access_token
                 state.user = action.payload.user
-                localStorage.setItem('token', action.payload.access_token)
+                localStorage.setItem('access_token', action.payload.access_token)
                 state.status = "succeeded"
             })
             .addCase(registerUser.rejected, (state, action) => {
@@ -98,6 +104,6 @@ export const authSlice = createSlice({
     }
 })
 
-export const { logout, refreshToken } = authSlice.actions;
+export const { logout, refreshToken, pullTokenFromStorage } = authSlice.actions;
 
 export default authSlice.reducer;

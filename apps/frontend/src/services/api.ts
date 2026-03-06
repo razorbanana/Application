@@ -8,7 +8,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = store.getState().auth.access_token
+  let token = store.getState().auth.access_token
+  console.log(token)
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
