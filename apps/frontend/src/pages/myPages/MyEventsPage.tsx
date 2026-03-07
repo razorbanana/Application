@@ -3,7 +3,8 @@ import { useAppDispatch, useAppSelector, type RootState } from "../../app/store"
 import { fetchAllEvents } from "../../app/slices/eventsSlice"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import MyEventsWeeklyView from "../../components/myEventsComponents/MyEventsWeeklyView"
-import { startOfWeek, addDays } from "date-fns"
+import { startOfWeek, endOfWeek, addDays, startOfMonth, endOfMonth, addMonths} from "date-fns"
+import MyEventsMonthlyView from "../../components/myEventsComponents/MyEventsMonthlyView"
 
 export default function MyEventsPage(){
     
@@ -12,12 +13,8 @@ export default function MyEventsPage(){
 
     const dispatch = useAppDispatch()
     const {events, status} = useAppSelector((state: RootState) => state.events)
-
     const [mode, setMode] = useState<"month" | "week">("week")
-
     const [currentDate, setCurrentDate] = useState(new Date());
-    const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
-    const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
     const formattedMonth = currentDate.toLocaleString("en-US", {
         month: "long",
@@ -33,7 +30,7 @@ export default function MyEventsPage(){
         if (mode === "week"){
             setCurrentDate(d => addDays(d, -7))
         }else{
-
+            setCurrentDate(d => addMonths(d, -1))
         }
     }
 
@@ -41,7 +38,7 @@ export default function MyEventsPage(){
         if (mode === "week"){
             setCurrentDate(d => addDays(d, 7))
         }else{
-
+            setCurrentDate(d => addMonths(d, 1))
         }
     }
 
@@ -63,7 +60,7 @@ export default function MyEventsPage(){
                 </div>
             </div>
 
-            {mode === 'week' ? <MyEventsWeeklyView events={filteredEvents} days={days}/> : <></>}
+            {mode === 'week' ? <MyEventsWeeklyView events={filteredEvents} currentDate={currentDate}/> : <MyEventsMonthlyView events={filteredEvents} currentDate={currentDate}/>}
         </div>
     )
 }
