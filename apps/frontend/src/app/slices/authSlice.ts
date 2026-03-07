@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { login, register, fetchUser} from "../../services/authApi";
+import { login, register, fetchUser, updateUser} from "../../services/authApi";
 import type { LoginRequestDto } from "../../types/dtos/requests/LoginRequestDto";
 import type { RegisterRequestDto } from "../../types/dtos/requests/RegisterRequestDto";
 import type { UserType } from "../../types/UserType";
+import type { UpdateUserDto } from "../../types/dtos/requests/UpdateUserRequestDto";
 
 interface AuthState {
   user: UserType | null;
@@ -56,7 +57,13 @@ export const fetchCurrentUser = createAsyncThunk(
     }
 )
 
-
+export const updateCurrentUser = createAsyncThunk(
+    "auth/updateUser",
+    async (updateUserDto: UpdateUserDto, thunkApi) => {
+        await updateUser(updateUserDto)
+        thunkApi.dispatch(authSlice.actions.updateUser(updateUserDto))
+    }
+)
 
 export const authSlice = createSlice({
     name: "auth",
@@ -70,6 +77,12 @@ export const authSlice = createSlice({
         pullTokenFromStorage: (state) => {
             const token = localStorage.getItem("access_token")
             state.access_token = token ? token : null
+        },
+        updateUser: (state, action) => {
+            state.user = {
+                ...state.user,
+                ...action.payload
+            }
         },
         refreshToken: () => {}
     },
@@ -100,6 +113,16 @@ export const authSlice = createSlice({
                 state.status = "succeeded"
             })
             .addCase(fetchCurrentUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload as string
+            })
+            .addCase(updateCurrentUser.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(updateCurrentUser.fulfilled, (state) => {
+                state.status = "succeeded"
+            })
+            .addCase(updateCurrentUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload as string
             })

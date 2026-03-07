@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector, type RootState } from "../../app/store"
 import { fetchAllEvents } from "../../app/slices/eventsSlice"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import MyEventsWeeklyView from "../../components/myEventsComponents/MyEventsWeeklyView"
-import { startOfWeek, endOfWeek, addDays, startOfMonth, endOfMonth, addMonths} from "date-fns"
+import { addDays, addMonths} from "date-fns"
 import MyEventsMonthlyView from "../../components/myEventsComponents/MyEventsMonthlyView"
 
 export default function MyEventsPage(){
@@ -12,7 +12,7 @@ export default function MyEventsPage(){
     const chosenModeStyles = `bg-blue-600 text-white rounded-lg`
 
     const dispatch = useAppDispatch()
-    const {events, status} = useAppSelector((state: RootState) => state.events)
+    const {events} = useAppSelector((state: RootState) => state.events)
     const [mode, setMode] = useState<"month" | "week">("week")
     const [currentDate, setCurrentDate] = useState(new Date());
 

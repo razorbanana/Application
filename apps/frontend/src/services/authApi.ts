@@ -2,6 +2,7 @@ import type { RegisterRequestDto } from "../types/dtos/requests/RegisterRequestD
 import type { LoginRequestDto } from "../types/dtos/requests/LoginRequestDto";
 import type { LoginResponseDto } from "../types/dtos/LoginResponseDto";
 import api from "./api";
+import type { UpdateUserDto } from "../types/dtos/requests/UpdateUserRequestDto";
 
 export async function login({identifier, password}: LoginRequestDto): Promise<LoginResponseDto>{
     const response = await api.post<LoginResponseDto>(`/auth/login`, {
@@ -19,4 +20,8 @@ export async function register( details: RegisterRequestDto ): Promise<LoginResp
 export async function fetchUser(){
     const response = await api.get(`/users/me`)
     return response.data
+}
+
+export async function updateUser(updateUserDto: UpdateUserDto){
+    await api.patch(`users/me`, updateUserDto)
 }

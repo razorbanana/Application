@@ -5,6 +5,7 @@ import { EventsService } from '../events/events.service';
 import { USERS_REPOSITORY } from 'src/constants';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import { UpdateUserDto } from './dto/UpdateUserDto';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +41,9 @@ export class UsersService {
     }else{
       throw new UnauthorizedException()
     }
-    
+  }
+
+  async updateUserInformation(userId: string, updateUserDto: UpdateUserDto){
+    await this.usersRepository.update({id: userId}, updateUserDto)
   }
 }
