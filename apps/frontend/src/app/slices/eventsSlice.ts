@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { EventType } from "../../types/EventType";
-import { getAllEvents, joinEventById, createEventRequest } from "../../services/eventsApi";
+import { getAllEvents, joinEventById, createEventRequest, leaveEventById } from "../../services/eventsApi";
 import type { CreateEventRequestDto } from "../../types/dtos/requests/CreateEventRequestDto";
 
 type EventsState = {
@@ -25,6 +25,14 @@ export const joinEvent = createAsyncThunk(
     "events/joinEvent",
     async (eventId: string) => {
         await joinEventById(eventId)
+        return eventId
+    }
+)
+
+export const leaveEvent = createAsyncThunk(
+    "events/leaveEvent",
+    async (eventId: string) => {
+        await leaveEventById(eventId)
         return eventId
     }
 )
@@ -68,6 +76,21 @@ export const eventsSlice = createSlice(
                 } : event)
             })
             .addCase(joinEvent.rejected, (state) => {
+                state.status = "failed"
+            })
+            .addCase(leaveEvent.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(leaveEvent.fulfilled, (state, action) => {
+                state.status = "succeeded"
+                const eventId = action.payload
+                state.events = state.events.map(event => event.id === eventId ? {
+                    ...event,
+                    isJoined: !event.isJoined,
+                    visitorCount: event.visitorCount - 1
+                } : event)
+            })
+            .addCase(leaveEvent.rejected, (state) => {
                 state.status = "failed"
             })
             .addCase(createEvent.pending, (state) => {

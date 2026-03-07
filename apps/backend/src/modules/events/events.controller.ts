@@ -37,7 +37,7 @@ export class EventsController {
   @ApiOkResponse({
     description: 'The user has successfully joined the event.'
   })
-  @Post(':id/join')
+  @Post('join')
   async join(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(joinEventSchema)) joinEventDto: JoinEventDto) {
     await this.eventsService.join(user.sub, joinEventDto);
   }
@@ -47,7 +47,7 @@ export class EventsController {
   @ApiOkResponse({
     description: 'The user has successfully left the event.', 
   })
-  @Post(':id/leave')
+  @Post('leave')
   async leave(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(leaveEventSchema)) leaveEventDto: LeaveEventDto) {
     await this.eventsService.leave(user.sub, leaveEventDto);
   }

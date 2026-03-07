@@ -19,5 +19,5 @@ export class JoinEventDto {
     example: "organizer", 
     description: 'Role of the user in the event (Organizer or Visitor)' 
   })
-  userRole: UserRole;
+  userRole?: UserRole;
 }

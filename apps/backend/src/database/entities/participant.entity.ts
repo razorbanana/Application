@@ -20,7 +20,7 @@ export class Participant {
     @JoinColumn({name: "eventId"})
     event: Event
 
-    @Column()
+    @Column({default: "visitor"})
     userRole: UserRole;
 
 }

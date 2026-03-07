@@ -8,7 +8,11 @@ export async function getAllEvents(): Promise<EventDto[]>{
 }
 
 export async function joinEventById(eventId: string): Promise<void>{
-    await api.post(`/events/${eventId}/join`)
+    await api.post(`/events/join`, {eventId})
+}
+
+export async function leaveEventById(eventId: string): Promise<void>{
+    await api.post(`/events/leave`, {eventId})
 }
 
 export async function createEventRequest(details: CreateEventRequestDto){
