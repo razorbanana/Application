@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from "../../app/store"
 import RowInput from "../../components/formComponents/RowInput"
 import type { UserType } from "../../types/UserType"
 import { updateCurrentUser } from "../../app/slices/authSlice"
+import FormButton from "../../components/formComponents/FormButton"
 
 export default function ProfilePage(){
-    const basicButtonStyles = "mx-3 mt-4 text-gray-700 hover:text-blue-600 cursor-pointer px-3 py-2 rounded-lg border border-gray-300"
     const {user, status} = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
 
@@ -39,13 +39,7 @@ export default function ProfilePage(){
                         <RowInput name="email" label={"Your email:"} value={data.email} placeholder="Enter your new email" handleInputChange={handleInputChange("email")} optional={true}/>
                         <RowInput name="city" label={"Your city:"} value={data.city} placeholder="Enter your new city" handleInputChange={handleInputChange("city")} optional={true}/>
 
-                        <button 
-                            className={`${basicButtonStyles}`}
-                            disabled={status === 'loading'}
-                            onClick={(e) => handleUserUpdate(e)}
-                        >
-                            {status === 'loading' ? 'Processing...' : 'Change your information'}
-                        </button>
+                        <FormButton disabled={status === 'loading'} onClick={(e) => handleUserUpdate(e)} text={status === 'loading' ? 'Processing...' : 'Change your information'}/>
                     </form>
                 </div>
     )

@@ -4,10 +4,9 @@ import type { CreateEventRequestDto } from "../types/dtos/requests/CreateEventRe
 import { useState } from "react"
 import { createEvent } from "../app/slices/eventsSlice"
 import InputLabel from "../components/formComponents/InputLabel"
+import FormButton from "../components/formComponents/FormButton"
 
 export default function CreateEventPage(){
-
-    const basicButtonStyles = "mx-3 mt-4 text-gray-700 hover:text-blue-600 cursor-pointer px-3 py-2 rounded-lg border border-gray-300"
     const status = useAppSelector(state => state.events.status)
     const dispatch = useAppDispatch()
     const [data, setData] = useState<CreateEventRequestDto>({
@@ -101,13 +100,7 @@ export default function CreateEventPage(){
                     </label>
                 </div>
 
-                <button 
-                    className={`${basicButtonStyles}`}
-                    disabled={status === 'loading'}
-                    onClick={(e) => handleCreateEvent(e)}
-                >
-                    {status === 'loading' ? 'Processing...' : 'Create Event'}
-                </button>
+                <FormButton disabled={status === 'loading'} onClick={(e) => handleCreateEvent(e)} text={status === 'loading' ? 'Processing...' : 'Create Event'}/>
             </form>
         </div>
     )

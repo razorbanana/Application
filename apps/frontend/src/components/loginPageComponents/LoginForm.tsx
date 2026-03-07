@@ -3,13 +3,13 @@ import type { LoginRequestDto } from "../../types/dtos/requests/LoginRequestDto"
 import { loginUser } from "../../app/slices/authSlice"
 import { useState } from "react"
 import RowInput from "../formComponents/RowInput"
+import FormButton from "../formComponents/FormButton"
 
 type LoginFormProps = {
     toggleMode: () => void
 }
 
 export default function LoginForm({toggleMode}: LoginFormProps){
-    const basicButtonStyles = "mx-3 mt-4 text-gray-700 hover:text-blue-600 cursor-pointer px-3 py-2 rounded-lg border border-gray-300"
 
     const status= useAppSelector(state => state.auth.status)
     const dispatch = useAppDispatch()
@@ -38,19 +38,8 @@ export default function LoginForm({toggleMode}: LoginFormProps){
             <RowInput name="password" label="Password:" value={data.password} handleInputChange={handleInputChange("password")}  placeholder="Enter your password:" type="password"/>
             
             <div className="flex justify-evenly">
-                    <button 
-                        className={`${basicButtonStyles}`}
-                        disabled={status === 'loading'}
-                        onClick={(e) => handleLogin(e)}
-                    >
-                        {status === 'loading' ? 'Processing...' : 'Login'}
-                    </button>
-
-                    <button 
-                        className={`${basicButtonStyles}`}
-                        onClick={() => toggleMode()}>
-                        Need an account? Register
-                    </button>
+                <FormButton onClick={(e) => handleLogin(e)} text={status === 'loading' ? 'Processing...' : 'Login'} disabled={status === 'loading'}/>
+                <FormButton onClick={() => toggleMode()} text="Need an account? Register"/>
             </div>
         </form>
     )
