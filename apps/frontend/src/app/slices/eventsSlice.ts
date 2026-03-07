@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { EventType } from "../../types/EventType";
-import { getAllEvents, joinEventById } from "../../services/eventsApi";
+import { getAllEvents, joinEventById, createEventRequest } from "../../services/eventsApi";
+import type { CreateEventRequestDto } from "../../types/dtos/requests/CreateEventRequestDto";
 
 type EventsState = {
     events: EventType[],
@@ -25,6 +26,13 @@ export const joinEvent = createAsyncThunk(
     async (eventId: string) => {
         await joinEventById(eventId)
         return eventId
+    }
+)
+
+export const createEvent = createAsyncThunk(
+    "events/createEvent",
+    async (data: CreateEventRequestDto) => {
+        await createEventRequest(data)
     }
 )
 
@@ -62,10 +70,19 @@ export const eventsSlice = createSlice(
             .addCase(joinEvent.rejected, (state) => {
                 state.status = "failed"
             })
+            .addCase(createEvent.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(createEvent.fulfilled, (state) => {
+                state.status = "succeeded"
+            })
+            .addCase(createEvent.rejected, (state) => {
+                state.status = "failed"
+            })
         }
     }
 )
 
 export default eventsSlice.reducer
 
-export const { fetchEventById, createEvent } = eventsSlice.actions;
+export const { fetchEventById } = eventsSlice.actions;

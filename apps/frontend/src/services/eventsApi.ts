@@ -1,4 +1,5 @@
 import type { EventDto } from "../types/dtos/EventDto";
+import type { CreateEventRequestDto } from "../types/dtos/requests/CreateEventRequestDto";
 import api from "./api";
 
 export async function getAllEvents(): Promise<EventDto[]>{
@@ -8,4 +9,8 @@ export async function getAllEvents(): Promise<EventDto[]>{
 
 export async function joinEventById(eventId: string): Promise<void>{
     await api.post(`/events/${eventId}/join`)
+}
+
+export async function createEventRequest(details: CreateEventRequestDto){
+    await api.post(`events/`, details)
 }
