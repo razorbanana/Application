@@ -14,3 +14,7 @@ export async function joinEventById(eventId: string): Promise<void>{
 export async function createEventRequest(details: CreateEventRequestDto){
     await api.post(`events/`, details)
 }
+
+export async function getMyEventsRequest(){
+    await api.get(`users/me/events`)
+}
