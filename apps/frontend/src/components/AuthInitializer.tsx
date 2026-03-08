@@ -9,11 +9,14 @@ export const AuthInitializer = () => {
 
     useEffect(()=>{
         isLoggedIn && dispatch(fetchCurrentUser())
-        dispatch(fetchAllEvents())
         if (!isLoggedIn){
             dispatch(logout())
         }
     }, [dispatch, isLoggedIn])
+
+    useEffect(() => {
+        dispatch(fetchAllEvents())
+    }, [isLoggedIn])
 
     return null
 }

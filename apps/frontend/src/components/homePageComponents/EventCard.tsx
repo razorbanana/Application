@@ -8,9 +8,10 @@ import { useNavigate } from "react-router";
 export default function EventCard ({event}: {event: EventType}) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const {datePart, timePart} = useEventDate(event.event_date)
+    const {datePart, timePart} = useEventDate(event.eventDate)
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
         if (event.isJoined){
             dispatch(leaveEvent(event.id))
         }else{
@@ -24,8 +25,8 @@ export default function EventCard ({event}: {event: EventType}) {
     }
 
     return (
-        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col cursor-pointer" onClick={openEvent}>
-            <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg">{event.name}</p>
+        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col" >
+            <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg cursor-pointer" onClick={openEvent}>{event.name}</p>
             <p className="text-gray-600 mb-3">{event.description}</p>
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>
             <p className="flex items-center text-gray-600"><Clock className="w-4 h-4 mr-2"/>{timePart}</p>
@@ -44,7 +45,7 @@ export default function EventCard ({event}: {event: EventType}) {
                             ? "bg-gray-600 text-white hover:bg-gray-300"
                             : "bg-blue-600 text-white hover:bg-blue-300")
                     }`}
-                    onClick={handleClick}
+                    onClick={(e) => handleClick(e)}
                 >{event.isJoined ? "Leave" : ( event.capacity === event.visitorCount ? "Full" : "Join")}</button>
             </div>
         </div>

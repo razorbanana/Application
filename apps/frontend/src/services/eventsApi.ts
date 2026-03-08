@@ -15,12 +15,9 @@ export async function leaveEventById(eventId: string): Promise<void>{
     await api.post(`/events/leave`, {eventId})
 }
 
-export async function createEventRequest(details: CreateEventRequestDto){
-    await api.post(`events/`, details)
-}
-
-export async function getMyEventsRequest(){
-    await api.get(`users/me/events`)
+export async function createEventRequest(details: CreateEventRequestDto): Promise<EventDto> {
+    const response = await api.post(`events/`, details)
+    return response.data
 }
 
 export async function getEventParticipants(eventId: string){

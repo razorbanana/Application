@@ -26,7 +26,7 @@ export class EventsController {
   @ApiBody({type: CreateEventDto})
   @ApiOkResponse({
     description: 'The event has been successfully created.',
-    type: EventResponseDto
+    type: EventWithVisitorCount
   })
   @Post()
   async create(@GetUser() user: JwtPayload, @Body(new YupValidationPipe(createEventSchema)) createEventDto: CreateEventDto) {
@@ -94,7 +94,6 @@ export class EventsController {
 
   @ApiOkResponse({
     description: 'The event has been successfully deleted.',
-    type: EventResponseDto
   })
   @Delete(':id')
   async remove(@Param('id') id: string) {

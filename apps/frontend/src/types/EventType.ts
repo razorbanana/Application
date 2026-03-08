@@ -3,7 +3,7 @@ export type EventType = {
     name: string;
     description: string
     location: string
-    event_date: string
+    eventDate: string
     capacity: number
     visitorCount: number
     public: boolean

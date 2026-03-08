@@ -6,11 +6,13 @@ import { createEvent } from "../app/slices/eventsSlice"
 import InputLabel from "../components/formComponents/InputLabel"
 import FormButton from "../components/formComponents/FormButton"
 import { validateField } from "../utils/validation/validateEvent"
+import { useNavigate } from "react-router"
 
 
 export default function CreateEventPage(){
     const status = useAppSelector(state => state.events.status)
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const [errors, setErrors] = useState({
         name: "",
         description: "",
@@ -62,6 +64,7 @@ export default function CreateEventPage(){
     const handleCreateEvent = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         dispatch(createEvent(data))
+        navigate("/event")
     }
 
     const handlePublicChange = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, visibility: boolean) => {

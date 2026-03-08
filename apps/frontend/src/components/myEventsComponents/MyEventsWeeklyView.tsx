@@ -14,7 +14,7 @@ export default function MyEventsWeeklyView ({events, currentDate}:MyEventsWeekly
     return (
         <div className="grid grid-cols-7 gap-2 justify-evenly mt-8 h-full">
             {days.map(day => {
-                const dayEvents = events.filter(event => isSameDay(parseISO(event.event_date), day))
+                const dayEvents = events.filter(event => isSameDay(parseISO(event.eventDate), day))
 
                 return (
                     <WeeklyViewDayCard key={day.toString()} events={dayEvents} day={day}/>

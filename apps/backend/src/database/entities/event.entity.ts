@@ -15,7 +15,7 @@ export class Event {
     @Column()
     location: string
 
-    @CreateDateColumn({name: 'event_date'})
+    @CreateDateColumn()
     eventDate: Date
 
     @Column('int', {nullable: true, default: null})

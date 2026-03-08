@@ -42,7 +42,8 @@ export const leaveEvent = createAsyncThunk(
 export const createEvent = createAsyncThunk(
     "events/createEvent",
     async (data: CreateEventRequestDto) => {
-        await createEventRequest(data)
+        const response = await createEventRequest(data)
+        return response
     }
 )
 
@@ -99,7 +100,9 @@ export const eventsSlice = createSlice(
             .addCase(createEvent.pending, (state) => {
                 state.status = "loading"
             })
-            .addCase(createEvent.fulfilled, (state) => {
+            .addCase(createEvent.fulfilled, (state, action) => {
+                state.chosenEventId = action.payload.id
+                state.events = state.events.concat(action.payload)
                 state.status = "succeeded"
             })
             .addCase(createEvent.rejected, (state) => {

@@ -38,7 +38,7 @@ export default function MyEventsMonthlyView ({events, currentDate}: MyEventsMont
                     )
                 }
 
-                const dayEvents = events.filter(event => isSameDay(parseISO(event.event_date), day))
+                const dayEvents = events.filter(event => isSameDay(parseISO(event.eventDate), day))
                 return (
                     <MonthlyViewDayCard key={day.toString()} events={dayEvents} day={day}/>
                 )

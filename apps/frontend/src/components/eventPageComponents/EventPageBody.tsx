@@ -10,7 +10,7 @@ import type { ParticipantType } from "../../types/ParticipantType";
 
 export default function EventPageBody({event}: {event: EventType}){
     const dispatch = useAppDispatch()
-    const {datePart, timePart} = event && useEventDate(event.event_date)
+    const {datePart, timePart} = event && useEventDate(event.eventDate)
     const [participants, setParticipants] = useState<ParticipantType[]>([])
     const user = useAppSelector(state => state.auth.user)
 

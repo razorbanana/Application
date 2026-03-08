@@ -24,7 +24,11 @@ export class EventsService {
   async create(userId: string, createEventDto: CreateEventDto) {
     const event = await this.eventsRepository.save(this.eventsRepository.create(createEventDto))
     this.participantsRepository.create({userId, eventId: event.id, userRole: "organizer"})
-    return event
+    return {
+      ...event,
+      visitorCount: 0,
+      isJoined: true
+    }
   }
 
   async join(userId: string, joinEventDto: JoinEventDto) {
