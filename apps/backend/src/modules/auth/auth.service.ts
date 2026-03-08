@@ -36,7 +36,7 @@ export class AuthService {
     const {id, password, ...userWithoutIdPassword} = user
     return {
       access_token: await this.jwtService.signAsync(payload),
-      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d"}),
+      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d", secret: process.env.JWT_REFRESH_SECRET}),
       user: userWithoutIdPassword
     }
   }
@@ -50,21 +50,22 @@ export class AuthService {
     const {id, password, ...userWithoutIdPassword} = user
     return {
       access_token: await this.jwtService.signAsync(payload),
-      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d"}),
+      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d", secret: process.env.JWT_REFRESH_SECRET}),
       user: userWithoutIdPassword
     }
   }
 
   async refresh(refreshDto: RefreshDto): Promise<LoginResponseDto>{
-    try {
+      console.log("here 1")
       const oldPayload: JwtPayload = await this.jwtService.verifyAsync(
         refreshDto.refresh_token,
         {secret: process.env.JWT_REFRESH_SECRET}
       )
+      console.log("here 2")
       const user = await this.usersService.findUserById(oldPayload.sub)
       if (!user) throw new UnauthorizedException()
       const { id, password, ...userWithoutIdPassword } = user
-
+      console.log("here 3")
       const payload: JwtPayload = {
         username: user.username,
         sub: user.id
@@ -75,8 +76,5 @@ export class AuthService {
         refresh_token: await this.jwtService.signAsync(payload, { expiresIn: "7d", secret: process.env.JWT_REFRESH_SECRET }),
         user: userWithoutIdPassword
       }
-    } catch {
-      throw new UnauthorizedException()
-    }
   }
 }

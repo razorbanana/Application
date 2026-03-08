@@ -1,5 +1,6 @@
 import axios from "axios";
-import { store } from "../app/store";
+import { authTokenInterceptor } from "./interceptors/authToken.interceptor";
+import refreshTokenInterceptor from "./interceptors/refreshToken.interceptor";
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -7,14 +8,11 @@ const api = axios.create({
   baseURL: apiUrl,
 });
 
-api.interceptors.request.use((config) => {
-  let token = store.getState().auth.access_token
+api.interceptors.request.use(authTokenInterceptor);
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
+api.interceptors.response.use(
+  (response) => response,
+  refreshTokenInterceptor
+)
 
 export default api;

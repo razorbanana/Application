@@ -15,7 +15,7 @@ export class AuthController {
 
   @ApiBody({type: RegisterDto})
   @ApiOkResponse({
-    description: "JWT token and user object are returned",
+    description: "JWT tokens and user object are returned",
     example: {
       access_token: "eyJhbGciOiJ...",
       refresh_token: "eyJhbGciOiJ...",
@@ -34,7 +34,7 @@ export class AuthController {
 
   @Post('login')
   @ApiOkResponse({
-    description: "JWT token and user object are returned",
+    description: "JWT tokens and user object are returned",
     example: {
       access_token: "eyJhbGciOiJ...",
       refresh_token: "eyJhbGciOiJ...",
@@ -52,7 +52,7 @@ export class AuthController {
 
   @Post('refresh')
   @ApiOkResponse({
-    description: "JWT token and user object are returned",
+    description: "JWT tokens and user object are returned",
     example: {
       access_token: "eyJhbGciOiJ...",
       refresh_token: "eyJhbGciOiJ...",
@@ -65,6 +65,7 @@ export class AuthController {
   })
   @ApiBody({type: RefreshDto})
   refresh(@Body(new YupValidationPipe(refreshSchema)) refreshDto: RefreshDto) {
+    console.log(`refresh token:`, refreshDto.refresh_token)
     return this.authService.refresh(refreshDto);
   }
 }

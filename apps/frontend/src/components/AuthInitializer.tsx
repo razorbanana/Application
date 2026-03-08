@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useAppDispatch } from "../app/store"
-import { fetchCurrentUser } from "../app/slices/authSlice"
+import { fetchCurrentUser, logout } from "../app/slices/authSlice"
 
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
@@ -8,6 +8,9 @@ export const AuthInitializer = () => {
 
     useEffect(()=>{
         access_token && dispatch(fetchCurrentUser())
+        if (access_token == null){
+            dispatch(logout())
+        }
     }, [dispatch, access_token])
 
     return null

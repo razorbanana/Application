@@ -12,11 +12,11 @@ interface AuthState {
   error: string | null;
 }
 
-const tokenFromStorage = localStorage.getItem("access_token");
+const accessTokenFromStorage = localStorage.getItem("access_token");
 
 const initialState: AuthState = {
     user: null,
-    access_token: tokenFromStorage,
+    access_token: accessTokenFromStorage,
     status: 'idle',
     error: null,
 }
@@ -72,7 +72,7 @@ export const authSlice = createSlice({
         logout: (state) => {
             state.access_token = null
             state.user = null
-            localStorage.removeItem('token')
+            localStorage.removeItem('access_token')
         },
         pullTokenFromStorage: (state) => {
             const token = localStorage.getItem("access_token")
@@ -92,6 +92,7 @@ export const authSlice = createSlice({
                 state.access_token = action.payload.access_token
                 state.user = action.payload.user
                 localStorage.setItem('access_token', action.payload.access_token)
+                localStorage.setItem('refresh_token', action.payload.refresh_token)
                 state.status = "succeeded"
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -102,6 +103,7 @@ export const authSlice = createSlice({
                 state.access_token = action.payload.access_token
                 state.user = action.payload.user
                 localStorage.setItem('access_token', action.payload.access_token)
+                localStorage.setItem('refresh_token', action.payload.refresh_token)
                 state.status = "succeeded"
             })
             .addCase(registerUser.rejected, (state, action) => {
