@@ -42,6 +42,12 @@ export default function MyEventsPage(){
         }
     }
 
+    if (filteredEvents.length === 0){
+        return (
+            <p className="text-2xl text-center mt-8">You are not part of any events yet. Explore public events and join.</p>
+        )
+    }
+
     return(
         <div className="p-3">
             <h1 className="text-3xl font-extrabold text-gray-900 m-3">My events</h1>
