@@ -6,11 +6,11 @@ type FormButtonProps = {
 
 export default function FormButton ({text, onClick, disabled=false}: FormButtonProps){
 
-    const basicButtonStyles = "mx-3 mt-4 text-gray-700 hover:text-blue-600 cursor-pointer px-3 py-2 rounded-lg border border-gray-300"
+    const basicButtonStyles = "mx-3 mt-4 text-gray-700  px-3 py-2 rounded-lg border border-gray-300"
     
     return (
        <button 
-            className={`${basicButtonStyles}`}
+            className={`${basicButtonStyles} ${disabled ? "bg-gray-200 " : "hover:text-blue-600 cursor-pointer"}`}
             disabled={disabled}
             onClick={onClick}>
             {text}
