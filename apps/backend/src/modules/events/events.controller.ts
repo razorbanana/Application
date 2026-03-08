@@ -16,6 +16,7 @@ import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../auth/guards/optional.guard';
 import { EventResponseDto } from './dto/responseDto/eventResponse.dto';
 import { EventWithVisitorCount } from './dto/responseDto/eventWithVisitorCount';
+import { ParticipantDto } from './dto/responseDto/participant.dto';
 
 @Controller('events')
 export class EventsController {
@@ -61,6 +62,15 @@ export class EventsController {
   async findAll(@GetUser() user?: JwtPayload) {
     const userId = user ? user.sub : undefined
     return await this.eventsService.findAllWithVisitorCount(userId);
+  }
+
+  @ApiOkResponse({
+    description: 'Returns a list of all events with visitor counts and participation status.',
+    type: [ParticipantDto]
+  })
+  @Get(`:eventId/participants`)
+  async findAllParticipants(@Param("eventId") eventId: string) {
+    return await this.eventsService.findEventParticipants(eventId);
   }
 
   @ApiOkResponse({

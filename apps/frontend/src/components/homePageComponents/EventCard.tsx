@@ -2,10 +2,12 @@ import { useAppDispatch } from "../../app/store";
 import { type EventType } from "../../types/EventType";
 import { useEventDate } from "../../utils/hooks/useEventDate";
 import { Calendar, Clock, MapPin, Users } from "lucide-react"
-import { joinEvent, leaveEvent } from "../../app/slices/eventsSlice";
+import { chooseEvent, joinEvent, leaveEvent } from "../../app/slices/eventsSlice";
+import { useNavigate } from "react-router";
 
 export default function EventCard ({event}: {event: EventType}) {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const {datePart, timePart} = useEventDate(event.event_date)
 
     const handleClick = () => {
@@ -16,8 +18,13 @@ export default function EventCard ({event}: {event: EventType}) {
         }
     }
 
+    const openEvent = () => {
+        dispatch(chooseEvent(event.id))
+        navigate("/event")
+    }
+
     return (
-        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col cursor-pointer">
+        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col cursor-pointer" onClick={openEvent}>
             <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg">{event.name}</p>
             <p className="text-gray-600 mb-3">{event.description}</p>
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>

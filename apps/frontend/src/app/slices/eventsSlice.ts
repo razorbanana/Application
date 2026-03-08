@@ -5,12 +5,14 @@ import type { CreateEventRequestDto } from "../../types/dtos/requests/CreateEven
 
 type EventsState = {
     events: EventType[],
-    status: 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle' | 'loading' | 'succeeded' | 'failed',
+    chosenEventId: string | null
 }
 
 const initialState: EventsState = {
     events: [],
-    status: "idle"
+    status: "idle",
+    chosenEventId: null
 }
 
 export const fetchAllEvents = createAsyncThunk(
@@ -49,8 +51,9 @@ export const eventsSlice = createSlice(
         name: "events",
         initialState,
         reducers: {
-            fetchEventById: ()=>{},
-            createEvent: ()=>{}
+            chooseEvent: (state, action)=>{
+                state.chosenEventId = action.payload
+            },
         },
         extraReducers: (builder) => {
             builder.addCase(fetchAllEvents.pending, (state) => {
@@ -108,4 +111,4 @@ export const eventsSlice = createSlice(
 
 export default eventsSlice.reducer
 
-export const { fetchEventById } = eventsSlice.actions;
+export const { chooseEvent } = eventsSlice.actions;

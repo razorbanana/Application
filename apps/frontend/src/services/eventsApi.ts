@@ -22,3 +22,7 @@ export async function createEventRequest(details: CreateEventRequestDto){
 export async function getMyEventsRequest(){
     await api.get(`users/me/events`)
 }
+
+export async function getEventParticipants(eventId: string){
+    return await api.get(`/events/${eventId}/participants`)
+}

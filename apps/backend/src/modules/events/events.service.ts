@@ -90,6 +90,18 @@ export class EventsService {
     return participantRecords.map(record => record.event)
   }
 
+  async findEventParticipants(eventId: string){
+    const participantRecords = await this.participantsRepository.find({
+      where: {eventId},
+      relations: ['user']
+    })
+    return participantRecords.map(record => ({
+      username: record.user.username,
+      fullName: record.user.fullName,
+      userRole: record.userRole
+    }))
+  }
+
   async update(id: string, updateEventDto: UpdateEventDto) {
     return this.eventsRepository.update({id}, updateEventDto)
   }
