@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../app/store";
 import { NavItem } from "./NavItem";
 import { List, Calendar, Plus, LogOut, User } from "lucide-react";
 import { logout } from "../../app/slices/authSlice";
+import { fetchAllEvents } from "../../app/slices/eventsSlice";
 
 export default function Navbar(){
 
@@ -10,6 +11,7 @@ export default function Navbar(){
 
   function handleLogout () {
     dispatch(logout())
+    dispatch(fetchAllEvents())
   }
 
   return (

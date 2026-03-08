@@ -4,6 +4,7 @@ import { loginUser } from "../../app/slices/authSlice"
 import { useState } from "react"
 import RowInput from "../formComponents/RowInput"
 import FormButton from "../formComponents/FormButton"
+import { fetchAllEvents } from "../../app/slices/eventsSlice"
 
 type LoginFormProps = {
     toggleMode: () => void
@@ -21,6 +22,7 @@ export default function LoginForm({toggleMode}: LoginFormProps){
     const handleLogin = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         dispatch(loginUser(data))
+        dispatch(fetchAllEvents())
     }
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

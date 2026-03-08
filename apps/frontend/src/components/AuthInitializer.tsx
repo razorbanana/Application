@@ -1,17 +1,19 @@
 import { useEffect } from "react"
-import { useAppDispatch } from "../app/store"
+import { useAppDispatch, useAppSelector } from "../app/store"
 import { fetchCurrentUser, logout } from "../app/slices/authSlice"
+import { fetchAllEvents } from "../app/slices/eventsSlice"
 
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
-    const access_token = localStorage.getItem('access_token')
+    const isLoggedIn = useAppSelector(state => !!state.auth.access_token)
 
     useEffect(()=>{
-        access_token && dispatch(fetchCurrentUser())
-        if (access_token == null){
+        isLoggedIn && dispatch(fetchCurrentUser())
+        dispatch(fetchAllEvents())
+        if (!isLoggedIn){
             dispatch(logout())
         }
-    }, [dispatch, access_token])
+    }, [dispatch, isLoggedIn])
 
     return null
 }

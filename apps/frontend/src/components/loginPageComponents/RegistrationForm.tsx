@@ -4,6 +4,7 @@ import { useState } from "react"
 import type { RegisterRequestDto } from "../../types/dtos/requests/RegisterRequestDto"
 import RowInput from "../formComponents/RowInput"
 import FormButton from "../formComponents/FormButton"
+import { fetchAllEvents } from "../../app/slices/eventsSlice"
 
 type LoginFormProps = {
     toggleMode: () => void
@@ -23,6 +24,7 @@ export default function RegistrationForm({toggleMode}: LoginFormProps){
     const handleRegistration = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         dispatch(registerUser(data))
+        dispatch(fetchAllEvents())
     }
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
