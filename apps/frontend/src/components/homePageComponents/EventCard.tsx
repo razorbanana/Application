@@ -17,7 +17,7 @@ export default function EventCard ({event}: {event: EventType}) {
     }
 
     return (
-        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col">
+        <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col cursor-pointer">
             <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg">{event.name}</p>
             <p className="text-gray-600 mb-3">{event.description}</p>
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>
@@ -29,13 +29,16 @@ export default function EventCard ({event}: {event: EventType}) {
                 <hr className="border-gray-200" />
 
                 <button
-                    className={`mt-2 px-4 py-2 rounded-lg w-full ${
-                        event.isJoined 
+                    disabled={event.capacity === event.visitorCount && !event.isJoined}
+                    className={`mt-2 px-4 py-2 rounded-lg w-full cursor-pointer ${
+                        event.isJoined   
+                        ? "bg-red-600 text-white hover:bg-red-300" 
+                        : ( event.capacity === event.visitorCount
                             ? "bg-gray-600 text-white hover:bg-gray-300"
-                            : "bg-blue-600 text-white hover:bg-blue-300"
+                            : "bg-blue-600 text-white hover:bg-blue-300")
                     }`}
                     onClick={handleClick}
-                >{event.isJoined ? "Leave" : "Join"}</button>
+                >{event.isJoined ? "Leave" : ( event.capacity === event.visitorCount ? "Full" : "Join")}</button>
             </div>
         </div>
     )

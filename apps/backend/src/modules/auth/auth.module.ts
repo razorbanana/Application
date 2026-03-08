@@ -14,7 +14,7 @@ dotenv.config()
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET || 'they will never know',
-      signOptions: {expiresIn: '30s'}
+      signOptions: {expiresIn: '60m'}
     })
   ],
   controllers: [AuthController],
