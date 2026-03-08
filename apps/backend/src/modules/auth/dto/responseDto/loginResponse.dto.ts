@@ -33,4 +33,9 @@ export default class LoginResponseDto{
         description: 'JWT token'
     })
     access_token: string
+
+    @ApiProperty({ 
+        description: 'Refresh JWT token'
+    })
+    refresh_token: string
 }

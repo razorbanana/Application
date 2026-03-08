@@ -6,6 +6,8 @@ import { YupValidationPipe } from 'src/utils/pipes/yup.pipe';
 import { loginSchema } from './schemas/login.schema';
 import { registerScheme } from './schemas/register.schema';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import RefreshDto from './dto/refresh.dto';
+import { refreshSchema } from './schemas/refresh.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -15,13 +17,15 @@ export class AuthController {
   @ApiOkResponse({
     description: "JWT token and user object are returned",
     example: {
-      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3Mjc5NTc3OSwiZXhwIjoxNzcyNzk3NTc5fQ.V7Plbln8eR-YSHwYy5JJ8Pev4BF6tx1Hr-L0z4Mt-oI",
-    user: {
+      access_token: "eyJhbGciOiJ...",
+      refresh_token: "eyJhbGciOiJ...",
+      user: {
         username: "benlee",
         email: "ben.lee@example.com",
         fullName: "Benjamin Lee",
         city: "New York"
-    }}
+      }
+    }
   })
   @Post('register')
   register(@Body(new YupValidationPipe(registerScheme)) registerDto: RegisterDto) {
@@ -32,7 +36,8 @@ export class AuthController {
   @ApiOkResponse({
     description: "JWT token and user object are returned",
     example: {
-      access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YmZjNDBjMC1kMjk2LTQ2YjQtODZiZi1lOTY3MzRhODc3N2UiLCJ1c2VybmFtZSI6ImJlbmxlZSIsImlhdCI6MTc3Mjc5NTc3OSwiZXhwIjoxNzcyNzk3NTc5fQ.V7Plbln8eR-YSHwYy5JJ8Pev4BF6tx1Hr-L0z4Mt-oI",
+      access_token: "eyJhbGciOiJ...",
+      refresh_token: "eyJhbGciOiJ...",
     user: {
         username: "benlee",
         email: "ben.lee@example.com",
@@ -43,5 +48,23 @@ export class AuthController {
   @ApiBody({type: LoginDto})
   login(@Body(new YupValidationPipe(loginSchema)) loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('refresh')
+  @ApiOkResponse({
+    description: "JWT token and user object are returned",
+    example: {
+      access_token: "eyJhbGciOiJ...",
+      refresh_token: "eyJhbGciOiJ...",
+    user: {
+        username: "benlee",
+        email: "ben.lee@example.com",
+        fullName: "Benjamin Lee",
+        city: "New York"
+    }}
+  })
+  @ApiBody({type: RefreshDto})
+  refresh(@Body(new YupValidationPipe(refreshSchema)) refreshDto: RefreshDto) {
+    return this.authService.refresh(refreshDto);
   }
 }

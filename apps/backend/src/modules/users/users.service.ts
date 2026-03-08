@@ -43,6 +43,15 @@ export class UsersService {
     }
   }
 
+  async findUserById(userId: string){
+    const user = await this.usersRepository.findOne({where: {id: userId}})
+    if (user){
+      return user
+    }else{
+      throw new UnauthorizedException()
+    }
+  }
+
   async updateUserInformation(userId: string, updateUserDto: UpdateUserDto){
     await this.usersRepository.update({id: userId}, updateUserDto)
   }

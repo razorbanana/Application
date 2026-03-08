@@ -6,6 +6,11 @@ import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { Inject } from '@nestjs/common';
 import LoginResponseDto from './dto/responseDto/loginResponse.dto';
+import RefreshDto from './dto/refresh.dto';
+import { JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import dotenv from "dotenv"
+dotenv.config()
+
 
 @Injectable()
 export class AuthService {
@@ -31,6 +36,7 @@ export class AuthService {
     const {id, password, ...userWithoutIdPassword} = user
     return {
       access_token: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d"}),
       user: userWithoutIdPassword
     }
   }
@@ -44,8 +50,33 @@ export class AuthService {
     const {id, password, ...userWithoutIdPassword} = user
     return {
       access_token: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload, {expiresIn: "7d"}),
       user: userWithoutIdPassword
     }
   }
 
+  async refresh(refreshDto: RefreshDto): Promise<LoginResponseDto>{
+    try {
+      const oldPayload: JwtPayload = await this.jwtService.verifyAsync(
+        refreshDto.refresh_token,
+        {secret: process.env.JWT_REFRESH_SECRET}
+      )
+      const user = await this.usersService.findUserById(oldPayload.sub)
+      if (!user) throw new UnauthorizedException()
+      const { id, password, ...userWithoutIdPassword } = user
+
+      const payload: JwtPayload = {
+        username: user.username,
+        sub: user.id
+      }
+
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+        refresh_token: await this.jwtService.signAsync(payload, { expiresIn: "7d", secret: process.env.JWT_REFRESH_SECRET }),
+        user: userWithoutIdPassword
+      }
+    } catch {
+      throw new UnauthorizedException()
+    }
+  }
 }
