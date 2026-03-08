@@ -6,6 +6,7 @@ import CreateEventPage from "../pages/CreateEventPage";
 import RootLayout from "../components/RootLayout";
 import ProfilePage from "../pages/myPages/ProfilePage";
 import EventPage from "../pages/EventPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
     { 
@@ -15,11 +16,11 @@ export const router = createBrowserRouter([
             {index: true, Component: HomePage},
             {path: "login", Component: LoginPage},
             {path: "my", children: [
-                {path: "events", Component: MyEventsPage},
-                {path: "profile", Component: ProfilePage},
+                {path: "events", Component: () => <ProtectedRoute Component={MyEventsPage}/>},
+                {path: "profile", Component: () => <ProtectedRoute Component={ProfilePage}/>},
             ]},
             {path: "event", Component: EventPage},
-            {path: "create", Component: CreateEventPage},
+            {path: "create", Component: () => <ProtectedRoute Component={CreateEventPage}/>},
         ]
     },
 ]);

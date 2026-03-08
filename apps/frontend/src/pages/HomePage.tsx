@@ -33,7 +33,7 @@ export default function HomePage(){
                 onChange={(e) => setFilter(e.target.value)}
                 />
             </div>
-            {status === 'loading' && <p>Loading...</p>}
+            {status === 'loading' && <p className="text-center text-2xl">Loading...</p>}
             {status === 'succeeded' && <EventGrid events={filteredEvents}/>}
         </div>
     )
