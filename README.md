@@ -38,7 +38,7 @@ Infrastructure:
 
 git clone <repo-url>
 
-cd project
+cd Application
 
 ### 2. Run with Docker
 
@@ -77,8 +77,9 @@ VITE_API_URL=backend url
 Copy `.env.example` to `.env` in each folder:
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+cp apps/backend/.env.example apps/backend/.env
+cp apps/frontend/.env.example apps/frontend/.env
+cp .env.example .env
 ```
 
 ## Database
