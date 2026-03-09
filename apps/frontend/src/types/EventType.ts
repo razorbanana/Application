@@ -8,4 +8,5 @@ export type EventType = {
     visitorCount: number
     public: boolean
     isJoined: boolean
+    isOrganizer: boolean
 }

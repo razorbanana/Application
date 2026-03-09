@@ -23,11 +23,13 @@ export class EventsService {
 
   async create(userId: string, createEventDto: CreateEventDto) {
     const event = await this.eventsRepository.save(this.eventsRepository.create(createEventDto))
-    this.participantsRepository.create({userId, eventId: event.id, userRole: "organizer"})
+    const participant = this.participantsRepository.create({userId, eventId: event.id, userRole: "organizer"})
+    await this.participantsRepository.save(participant)
     return {
       ...event,
       visitorCount: 0,
-      isJoined: true
+      isJoined: true,
+      isOrganizer: true
     }
   }
 
@@ -64,13 +66,24 @@ export class EventsService {
     .groupBy('event.id');
 
     if (userId) {
-      query.addSelect(
+      query
+      .addSelect(
         `EXISTS(
           SELECT 1 FROM participant p 
           WHERE p."eventId" = event.id AND p."userId" = :userId
         )`, 
         'isJoined'
-      ).setParameter('userId', userId);
+      )
+      .addSelect(
+        `EXISTS(
+          SELECT 1 FROM participant p
+          WHERE p."eventId" = event.id 
+          AND p."userId" = :userId 
+          AND p."userRole" = 'organizer'
+        )`,
+        'isOrganizer'
+      )
+      .setParameter('userId', userId);
     }
 
     const rawResults = await query.getRawMany();
@@ -78,7 +91,8 @@ export class EventsService {
     return rawResults.map(result => ({
       ...result,
       visitorCount: parseInt(result.visitorCount, 10),
-      isJoined: result.isJoined === true || result.isJoined === 'true'
+      isJoined: result.isJoined === true || result.isJoined === 'true',
+      isOrganizer: result.isOrganizer === true || result.isOrganizer === 'true'
     }));
   }
 

@@ -8,4 +8,5 @@ export type EventDto = {
     visitorCount: number
     public: boolean
     isJoined: boolean
+    isOrganizer: boolean
 }

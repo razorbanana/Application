@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../app/store"
 import RowInput from "../components/formComponents/RowInput"
 import type { CreateEventRequestDto } from "../types/dtos/requests/CreateEventRequestDto"
 import { useState } from "react"
-import { createEvent } from "../app/slices/eventsSlice"
+import { chooseEvent, createEvent } from "../app/slices/eventsSlice"
 import InputLabel from "../components/formComponents/InputLabel"
 import FormButton from "../components/formComponents/FormButton"
 import { validateField } from "../utils/validation/validateEvent"
@@ -63,6 +63,7 @@ export default function CreateEventPage(){
 
     const handleCreateEvent = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
+        dispatch(chooseEvent(null))
         dispatch(createEvent(data))
         navigate("/event")
     }

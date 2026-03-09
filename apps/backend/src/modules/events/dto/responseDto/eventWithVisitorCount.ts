@@ -9,5 +9,9 @@ export class EventWithVisitorCount extends EventResponseDto {
   @ApiProperty({
     example: 'true', 
   })
-  isJoined: boolean
+  isJoined: boolean;
+  @ApiProperty({
+    example: 'true', 
+  })
+  isOrganizer: boolean;
 }

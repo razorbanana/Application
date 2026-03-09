@@ -15,6 +15,10 @@ export async function leaveEventById(eventId: string): Promise<void>{
     await api.post(`/events/leave`, {eventId})
 }
 
+export async function deleteEventById(eventId: string): Promise<void>{
+    await api.delete(`/events/${eventId}`)
+}
+
 export async function createEventRequest(details: CreateEventRequestDto): Promise<EventDto> {
     const response = await api.post(`events/`, details)
     return response.data
