@@ -77,8 +77,8 @@ VITE_API_URL=backend url
 Copy `.env.example` to `.env` in each folder:
 
 ```bash
-cp apps/backend/.env.example backend/.env
-cp apps/frontend/.env.example frontend/.env
+cp apps/backend/.env.example apps/backend/.env
+cp apps/frontend/.env.example apps/frontend/.env
 cp .env.example .env
 ```
 
