@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: events-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - events-network
+
+  backend:
+    build: ./apps/backend
+    container_name: events-backend
+    ports:
+      - "5000:5000"
+    environment:
+      PGHOST: ${PGHOST}
+      PGPORT: ${PGPORT}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      SALT_ROUNDS: ${SALT_ROUNDS}
+    depends_on:
+      - postgres
+    networks:
+      - events-network
+
+  frontend:
+    build: ./apps/frontend
+    container_name: events-frontend
+    ports:
+      - "3000:80"  
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    depends_on:
+      - backend
+    networks:
+      - events-network
+
+volumes:
+  pgdata:
+
+networks:
+  events-network:

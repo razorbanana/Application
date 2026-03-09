@@ -44,6 +44,10 @@ cd project
 
 docker compose up --build
 
+To seed application with data, run:
+
+docker exec -it events-backend npm run seed
+
 ### 3. Access applications
 
 Frontend:
@@ -56,13 +60,14 @@ http://localhost:5000
 
 Backend requires the following variables:
 
+PORT=5000
 PGHOST=postgres
 PGPORT=5432
 PGUSER=postgres
 PGPASSWORD=postgres
 PGDATABASE=events
 JWT_SECRET=secret
-JWT_REFRESH_SECRET=secret
+JWT_REFRESH_SECRET=moresecret
 SALT_ROUNDS=12
 
 Frontend requires the following variables:

@@ -11,5 +11,5 @@ export const AppDataSource = new DataSource({
   database: process.env.PGDATABASE || 'test',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrations: ['migrations/*{.ts,.js}'],
-  ssl: true
+  ssl: false
 });
