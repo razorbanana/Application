@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { EventType } from "../../types/EventType";
-import { getAllEvents, joinEventById, createEventRequest, leaveEventById, deleteEventById } from "../../services/eventsApi";
+import { getAllEvents, joinEventById, createEventRequest, leaveEventById, deleteEventById, updateEventRequest } from "../../services/eventsApi";
 import type { CreateEventRequestDto } from "../../types/dtos/requests/CreateEventRequestDto";
 
 type EventsState = {
@@ -44,6 +44,14 @@ export const createEvent = createAsyncThunk(
     async (data: CreateEventRequestDto) => {
         const response = await createEventRequest(data)
         return response
+    }
+)
+
+export const updateEvent = createAsyncThunk(
+    "events/updateEvent",
+    async (event: {id: string, data: CreateEventRequestDto}) => {
+        await updateEventRequest(event.id, event.data)
+        return event
     }
 )
 
@@ -114,6 +122,24 @@ export const eventsSlice = createSlice(
                 state.status = "succeeded"
             })
             .addCase(createEvent.rejected, (state) => {
+                state.status = "failed"
+            })
+            .addCase(updateEvent.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(updateEvent.fulfilled, (state, action) => {
+                state.chosenEventId = action.payload.id
+                state.events = state.events.map(event => 
+                    event.id === action.payload.id 
+                    ? {
+                        ...event,
+                        ...action.payload.data,
+                        eventDate: action.payload.data.eventDate.toISOString()
+                    }
+                    : event)
+                state.status = "succeeded"
+            })
+            .addCase(updateEvent.rejected, (state) => {
                 state.status = "failed"
             })
             .addCase(deleteEvent.fulfilled, (state, action) => {

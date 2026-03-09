@@ -44,8 +44,8 @@ export default function EventPageBody({event}: {event: EventType}){
     }
 
     return (
-        <div className="xl:w-1/3 md:w-1/2 mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-            <p className="text-gray-900 font-bold text-lg">{event.name}</p>
+        <div className="w-full">
+            <p className="text-gray-900 font-bold text-lg w-fit">{event.name}</p>
             <p className="text-gray-600 mb-3">{event.description}</p>
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>
             <p className="flex items-center text-gray-600"><Clock className="w-4 h-4 mr-2"/>{timePart}</p>

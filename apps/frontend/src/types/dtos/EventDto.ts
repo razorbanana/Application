@@ -6,7 +6,7 @@ export type EventDto = {
     eventDate: string
     capacity: number
     visitorCount: number
-    public: boolean
+    isPublic: boolean
     isJoined: boolean
     isOrganizer: boolean
 }

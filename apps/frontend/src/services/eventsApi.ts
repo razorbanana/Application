@@ -24,6 +24,10 @@ export async function createEventRequest(details: CreateEventRequestDto): Promis
     return response.data
 }
 
+export async function updateEventRequest(eventId: string, details: CreateEventRequestDto): Promise<void> {
+    await api.patch(`events/${eventId}`, details)
+}
+
 export async function getEventParticipants(eventId: string){
     return await api.get(`/events/${eventId}/participants`)
 }
