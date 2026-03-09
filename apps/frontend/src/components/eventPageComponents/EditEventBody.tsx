@@ -29,8 +29,8 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
         eventDate: new Date(eventBody.eventDate)
     })
 
-    const [date, setDate] = useState("")
-    const [time, setTime] = useState("")
+    const [date, setDate] = useState(data.eventDate.toISOString().slice(0, 10)) 
+    const [time, setTime] = useState(data.eventDate.toTimeString().slice(0, 5))
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData({

@@ -30,8 +30,12 @@ export default function CreateEventPage(){
         isPublic: true,
     })
 
-    const [date, setDate] = useState("")
-    const [time, setTime] = useState("")
+    const [date, setDate] = useState(() => {
+        const d = new Date(data.eventDate)
+        d.setDate(d.getDate() + 1)
+        return d.toISOString().slice(0, 10)
+    })
+    const [time, setTime] = useState(data.eventDate.toTimeString().slice(0, 5))
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData({
