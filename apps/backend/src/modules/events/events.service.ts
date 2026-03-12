@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { LeaveEventDto } from './dto/leave-event.dto';
@@ -6,9 +6,10 @@ import { JoinEventDto } from './dto/join-event.dto';
 import { Repository } from 'typeorm';
 import { Event } from 'src/database/entities/event.entity';
 import { Participant } from 'src/database/entities/participant.entity';
-import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY } from 'src/constants';
-import { JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import { EVENTS_REPOSITORY, PARTICIPANTS_REPOSITORY} from 'src/constants';
 import { EventWithVisitorCount } from './dto/responseDto/eventWithVisitorCount';
+import { TagsService } from 'src/modules/tags/tags.service';
+import { Tag } from 'src/database/entities/tag.entity';
 
 @Injectable()
 export class EventsService {
@@ -18,12 +19,20 @@ export class EventsService {
     private eventsRepository: Repository<Event>,
 
     @Inject(PARTICIPANTS_REPOSITORY)
-    private participantsRepository: Repository<Participant>
+    private participantsRepository: Repository<Participant>,
+
+    private readonly tagsService: TagsService
   ){}
 
   async create(userId: string, createEventDto: CreateEventDto) {
-    const event = await this.eventsRepository.save(this.eventsRepository.create(createEventDto))
-    const participant = this.participantsRepository.create({userId, eventId: event.id, userRole: "organizer"})
+    const { tagIds, ...eventData } = createEventDto
+    const event = this.eventsRepository.create(eventData)
+    if (tagIds?.length) {
+      const tags = await this.tagsService.findByIds(tagIds)
+      event.tags = tags
+    }
+    const savedEvent = await this.eventsRepository.save(event)
+    const participant = this.participantsRepository.create({userId, eventId: savedEvent.id, userRole: "organizer"})
     await this.participantsRepository.save(participant)
     return {
       ...event,
@@ -61,9 +70,15 @@ export class EventsService {
     }
 
     query.leftJoin('event.participants', 'participant', 'participant.userRole = :role', {role: "visitor"})
+    .leftJoinAndSelect('event.tags', 'tag')
     .select('event.*') 
-    .addSelect('COUNT(participant.userId)::int', 'visitorCount') 
-    .groupBy('event.id');
+    .addSelect('COUNT(DISTINCT participant.userId)::int', 'visitorCount') 
+    .groupBy('event.id')
+    .addSelect(
+      `json_agg(DISTINCT jsonb_build_object('id', tag.id, 'name', tag.name))
+      FILTER (WHERE tag.id IS NOT NULL)`,
+      'tags'
+    )
 
     if (userId) {
       query
@@ -121,7 +136,23 @@ export class EventsService {
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {
-    return this.eventsRepository.update({id}, updateEventDto)
+    const event = await this.eventsRepository.findOne({
+      where: { id },
+      relations: ['tags'],
+    });
+
+    if (event === null){
+      throw new BadRequestException()
+    }
+
+    Object.assign(event, updateEventDto)
+
+    if (updateEventDto.tagIds) {
+      const tags = await this.tagsService.findByIds(updateEventDto.tagIds);
+      event.tags = tags; 
+    }
+
+    return this.eventsRepository.save(event);
   }
 
   async remove(id: string) {

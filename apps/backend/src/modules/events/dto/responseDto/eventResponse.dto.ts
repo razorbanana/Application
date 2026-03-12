@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Tag } from 'src/database/entities/tag.entity';
 
 export class EventResponseDto {
 
@@ -44,5 +45,16 @@ export class EventResponseDto {
     description: 'Visibility of the event for unauthenticated users', 
     required: false
   })
-  isPublic: boolean
+  isPublic: boolean;
+
+  @ApiProperty({
+    example: [
+      {
+        id: "38ecfb51-2...",
+        name: "music"
+      }
+    ],
+    description: 'Tags of the event', 
+  })
+  tags: Tag[]
 }

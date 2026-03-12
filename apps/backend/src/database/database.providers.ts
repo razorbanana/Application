@@ -21,7 +21,7 @@ export const databaseProviders = [
           "migrations/*{.ts,.js}"
         ],
         synchronize: true,
-        ssl: false
+        ssl: true
       });
 
       return dataSource.initialize();

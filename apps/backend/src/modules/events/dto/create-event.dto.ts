@@ -37,5 +37,12 @@ export class CreateEventDto {
     description: 'Visibility of the event for unauthenticated users', 
     required: false
   })
-  isPublic?: boolean
+  isPublic?: boolean;
+
+  @ApiProperty({
+    example: ["f1a2b3c4-d5e6..."],
+    description: 'Ids of the tags for the event', 
+    required: false
+  })
+  tagIds?: string[];
 }
