@@ -4,5 +4,6 @@ export type CreateEventRequestDto = {
   location: string;
   eventDate: Date;
   capacity: number;
-  isPublic: boolean
+  isPublic: boolean;
+  tagIds: string[];
 }
