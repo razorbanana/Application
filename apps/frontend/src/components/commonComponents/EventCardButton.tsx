@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router"
 import type { EventType } from "../../types/EventType"
 import type { UserType } from "../../types/UserType"
 
@@ -9,6 +10,16 @@ type EventCardButtonProps = {
 }
 
 export default function EventCardButton ({event, handleDelete, handleClick, user}: EventCardButtonProps) {
+    const navigate = useNavigate()
+
+    const handleAuthOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (!user){
+            navigate("/login")
+        }else{
+            handleClick(e)
+        }
+    }
+
     return(
         <>
             {event.isOrganizer ? (
@@ -20,7 +31,7 @@ export default function EventCardButton ({event, handleDelete, handleClick, user
                     </button>
                 ) : (
                     <button
-                        disabled={(event.capacity === event.visitorCount && !event.isJoined) || user === null}
+                        disabled={(event.capacity === event.visitorCount && !event.isJoined)}
                         className={`mt-2 px-4 py-2 rounded-lg w-full cursor-pointer ${
                             event.isJoined
                                 ? "bg-red-600 text-white hover:bg-red-300"
@@ -28,7 +39,7 @@ export default function EventCardButton ({event, handleDelete, handleClick, user
                                 ? "bg-gray-600 text-white hover:bg-gray-300"
                                 : "bg-blue-600 text-white hover:bg-blue-300"
                         }`}
-                        onClick={handleClick}
+                        onClick={(e) => handleAuthOnClick(e)}
                     >
                         {event.isJoined ? "Leave" : event.capacity === event.visitorCount ? "Full" : "Join"}
                     </button>
