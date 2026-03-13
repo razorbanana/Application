@@ -2,14 +2,14 @@ import { format } from "date-fns"
 import { useAppDispatch } from "../../app/store"
 import { chooseEvent } from "../../app/slices/eventsSlice"
 import { useNavigate } from "react-router"
-import type { TagType } from "../../types/TagType"
+import type { TagName } from "../../types/TagType"
 import Tags from "../commonComponents/Tags"
 
 type EventTimeNameCardProps = {
     name: string,
     date: Date,
     eventId: string,
-    tags?: TagType[]
+    tags?: TagName[]
 }
 
 export default function EventTimeNameCard ({name, date, eventId, tags}: EventTimeNameCardProps) {
