@@ -30,10 +30,10 @@ export default function TagSelector ({selectedTags, setSelectedTags, error=""}:T
                      onClick={() => toggleTag(tag as TagName)}
                      className={`
                      transition
-                     ${isSelected ? "ring-2 ring-blue-500" : "opacity-70"}
+                     opacity-70}
                      `}
                   >
-                     <TagChip tag={tag as TagName} mode="full" />
+                     <TagChip tag={tag as TagName} mode="full" isSelected={isSelected}/>
                   </button>
                )
             }
