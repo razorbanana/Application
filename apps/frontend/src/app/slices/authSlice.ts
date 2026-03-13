@@ -1,11 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { login, register, fetchUser, updateUser} from "../../services/authApi";
-import type { LoginRequestDto } from "../../types/dtos/requests/LoginRequestDto";
-import type { RegisterRequestDto } from "../../types/dtos/requests/RegisterRequestDto";
+import { createSlice } from "@reduxjs/toolkit"
 import type { UserType } from "../../types/UserType";
-import type { UpdateUserDto } from "../../types/dtos/requests/UpdateUserRequestDto";
 
-interface AuthState {
+import { loginUserBuilderCases } from "./authReducers/loginUser.reducer";
+import { registerUserBuilderCases } from "./authReducers/registerUser.reducer";
+import { fetchUserBuilderCases } from "./authReducers/fetchUser.reducer";
+import { updateUserBuilderCases } from "./authReducers/updateUser.refucer";
+
+import { loginUser } from "./authReducers/loginUser.reducer";
+import { registerUser } from "./authReducers/registerUser.reducer";
+import { fetchCurrentUser } from "./authReducers/fetchUser.reducer";
+import { updateCurrentUser } from "./authReducers/updateUser.refucer";
+
+export interface AuthState {
   user: UserType | null;
   access_token: string | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -20,50 +26,6 @@ const initialState: AuthState = {
     status: 'idle',
     error: null,
 }
-
-export const loginUser = createAsyncThunk(
-    "user/login",
-    async (credentials: LoginRequestDto, {rejectWithValue}) => {
-        try {
-            const data = await login(credentials)
-            return data
-        }catch(err: any){
-            return rejectWithValue(err.response.data)
-        }
-    }
-)
-
-export const registerUser = createAsyncThunk(
-    "user/register",
-    async (details: RegisterRequestDto, {rejectWithValue}) => {
-        try{
-            const data = await register(details)
-            return data
-        }catch(err:any){
-            return rejectWithValue(err.response.data)
-        }
-    }
-)
-
-export const fetchCurrentUser = createAsyncThunk(
-    "auth/fetchCurrentUser",
-    async () => {
-        try{
-            const data = await fetchUser()
-            return data
-        }catch(err:any){
-            console.error(err)
-        }
-    }
-)
-
-export const updateCurrentUser = createAsyncThunk(
-    "auth/updateUser",
-    async (updateUserDto: UpdateUserDto, thunkApi) => {
-        await updateUser(updateUserDto)
-        thunkApi.dispatch(authSlice.actions.updateUser(updateUserDto))
-    }
-)
 
 export const authSlice = createSlice({
     name: "auth",
@@ -87,50 +49,13 @@ export const authSlice = createSlice({
         refreshToken: () => {}
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.access_token = action.payload.access_token
-                state.user = action.payload.user
-                localStorage.setItem('access_token', action.payload.access_token)
-                localStorage.setItem('refresh_token', action.payload.refresh_token)
-                state.status = "succeeded"
-            })
-            .addCase(loginUser.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string
-            })
-            .addCase(registerUser.fulfilled, (state, action) => {
-                state.access_token = action.payload.access_token
-                state.user = action.payload.user
-                localStorage.setItem('access_token', action.payload.access_token)
-                localStorage.setItem('refresh_token', action.payload.refresh_token)
-                state.status = "succeeded"
-            })
-            .addCase(registerUser.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string
-            })
-            .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-                state.user = action.payload
-                state.status = "succeeded"
-            })
-            .addCase(fetchCurrentUser.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string
-            })
-            .addCase(updateCurrentUser.pending, (state) => {
-                state.status = "loading"
-            })
-            .addCase(updateCurrentUser.fulfilled, (state) => {
-                state.status = "succeeded"
-            })
-            .addCase(updateCurrentUser.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload as string
-            })
+        loginUserBuilderCases(builder)
+        registerUserBuilderCases(builder)
+        fetchUserBuilderCases(builder)
+        updateUserBuilderCases(builder)
     }
 })
 
 export const { logout, refreshToken, pullTokenFromStorage } = authSlice.actions;
-
+export { loginUser, registerUser, fetchCurrentUser, updateCurrentUser }
 export default authSlice.reducer;
