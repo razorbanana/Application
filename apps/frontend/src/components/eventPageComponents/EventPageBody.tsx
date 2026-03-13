@@ -11,7 +11,11 @@ import ConfirmationModal from "../commonComponents/ConfirmationModal";
 import EventCardButton from "../commonComponents/EventCardButton";
 import Tags from "../commonComponents/Tags";
 
-export default function EventPageBody({event}: {event: EventType}){
+type EventPageBodyProps = {
+    event: EventType
+}
+
+export default function EventPageBody({event}: EventPageBodyProps){
     const dispatch = useAppDispatch()
     const {datePart, timePart} = event && useEventDate(event.eventDate)
     const [participants, setParticipants] = useState<ParticipantType[]>([])

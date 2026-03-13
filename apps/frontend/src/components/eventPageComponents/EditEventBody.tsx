@@ -14,9 +14,10 @@ import { useEffect } from "react"
 
 type EditEventBodyProps = {
     event: EventType
+    changeMode: () => void
 }
 
-export default function EditEventBody ({event}: EditEventBodyProps) {
+export default function EditEventBody ({event, changeMode}: EditEventBodyProps) {
     const status = useAppSelector(state => state.events.status)
     const dispatch = useAppDispatch()
     const [errors, setErrors] = useState({
@@ -78,9 +79,10 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
         validateField(data, setErrors, "eventDate", newDate)
     }
 
-    const handleUpdateEvent = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleUpdateEvent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        dispatch(updateEvent({id, data}))
+        await dispatch(updateEvent({id, data}))
+        changeMode()
     }
 
     const handlePublicChange = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, visibility: boolean) => {
