@@ -9,6 +9,7 @@ import { getEventParticipants } from "../../services/eventsApi";
 import type { ParticipantType } from "../../types/ParticipantType";
 import ConfirmationModal from "../commonComponents/ConfirmationModal";
 import EventCardButton from "../commonComponents/EventCardButton";
+import Tags from "../commonComponents/Tags";
 
 export default function EventPageBody({event}: {event: EventType}){
     const dispatch = useAppDispatch()
@@ -50,8 +51,10 @@ export default function EventPageBody({event}: {event: EventType}){
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>
             <p className="flex items-center text-gray-600"><Clock className="w-4 h-4 mr-2"/>{timePart}</p>
             <p className="flex items-center text-gray-600"><MapPin className="w-4 h-4 mr-2"/>{event.location}</p>
-            <p className="flex items-center text-gray-600 mb-8"><Users className="w-4 h-4 mr-2"/>{event.visitorCount} / {event.capacity}</p>
+            <p className="flex items-center text-gray-600"><Users className="w-4 h-4 mr-2"/>{event.visitorCount} / {event.capacity}</p>
             
+            <Tags tags={event.tags}/>
+
             <ParticipantList participants={participants}/>
 
             <ConfirmationModal isOpen={isOpen} setIsOpen={setIsOpen} handleDelete={handleDelete}/>
