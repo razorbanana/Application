@@ -25,11 +25,11 @@ export class EventsService {
   ){}
 
   async create(userId: string, createEventDto: CreateEventDto) {
-    const { tagIds, ...eventData } = createEventDto
+    const { tags, ...eventData } = createEventDto
     const event = this.eventsRepository.create(eventData)
-    if (tagIds?.length) {
-      const tags = await this.tagsService.findByIds(tagIds)
-      event.tags = tags
+    if (tags?.length) {
+      const temp = await this.tagsService.findByNames(tags)
+      event.tags = temp
     }
     const savedEvent = await this.eventsRepository.save(event)
     const participant = this.participantsRepository.create({userId, eventId: savedEvent.id, userRole: "organizer"})
@@ -147,8 +147,8 @@ export class EventsService {
 
     Object.assign(event, updateEventDto)
 
-    if (updateEventDto.tagIds) {
-      const tags = await this.tagsService.findByIds(updateEventDto.tagIds);
+    if (updateEventDto.tags) {
+      const tags = await this.tagsService.findByNames(updateEventDto.tags);
       event.tags = tags; 
     }
 

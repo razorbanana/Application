@@ -44,5 +44,5 @@ export class CreateEventDto {
     description: 'Ids of the tags for the event', 
     required: false
   })
-  tagIds?: string[];
+  tags?: string[];
 }

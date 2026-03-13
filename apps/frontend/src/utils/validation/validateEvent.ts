@@ -7,6 +7,7 @@ const schema = yup.object().shape({
   location: yup.string().min(2, "Location must be at least 2 characters").max(64, "Location is too long").required("Location is required"),
   eventDate: yup.date().min(new Date(), "Event date must be in the future").required("Event date is required"),
   capacity: yup.number().optional().positive("Capacity must be positive").integer("Capacity must be an integer"),
+  tags: yup.array().of(yup.string()).max(5)
 })
 
 export const validateField = async (
@@ -17,6 +18,7 @@ export const validateField = async (
       location: string;
       eventDate: string;
       capacity: string;
+      tags: string
   }>>
   ,field: string, value: any) => {
     try {

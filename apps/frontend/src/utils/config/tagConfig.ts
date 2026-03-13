@@ -10,8 +10,15 @@ import {
   Users,
   Sparkles
 } from "lucide-react";
+import type { TagName } from "../../types/TagType";
+import { type LucideProps } from "lucide-react";
 
-export const tagConfig = {
+type TagIconAndStyle = {
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>,
+  color: string
+}
+
+export const tagConfig: Record<TagName, TagIconAndStyle> = {
   games: {
     icon: Gamepad2,
     color: "bg-purple-100 text-purple-700"

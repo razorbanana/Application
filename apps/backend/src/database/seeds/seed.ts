@@ -67,7 +67,7 @@ async function seed(){
         const t = await tagRepo.save(tagRepo.create(tag))
     }
 
-    const eventsData: CreateEventDto[] = [
+    const eventsData = [
         {
             name: "Tech Meetup SF",
             description: "A casual meetup for software developers to share ideas.",

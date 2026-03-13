@@ -34,6 +34,14 @@ export class TagsService {
     })
   }
 
+  async findByNames(names: string[]){
+    return this.tagsRepository.find({
+      where: {
+        name: In(names)
+      }
+    })
+  }
+
   async remove(id: string) {
     return await this.tagsRepository.delete(id)
   }

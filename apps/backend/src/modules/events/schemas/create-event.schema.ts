@@ -6,5 +6,6 @@ export const createEventSchema = yup.object({
     location: yup.string().min(2).max(64).required(),
     eventDate: yup.date().min(new Date()).required(),
     capacity: yup.number().optional(),
-    isPublic: yup.boolean().optional()
+    isPublic: yup.boolean().optional(),
+    tags: yup.array().of(yup.string()).optional()
 })

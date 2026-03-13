@@ -1,3 +1,5 @@
+import type { TagName } from "../../TagType";
+
 export type CreateEventRequestDto = {
   name: string;
   description: string;
@@ -5,5 +7,5 @@ export type CreateEventRequestDto = {
   eventDate: Date;
   capacity: number;
   isPublic: boolean;
-  tagIds: string[];
+  tags: TagName[];
 }
