@@ -3,15 +3,19 @@ import { useEffect, useState } from "react"
 import { fetchAllEvents } from "../app/slices/eventsSlice"
 import EventGrid from "../components/homePageComponents/EventGrid"
 import { Search } from "lucide-react"
+import TagSelector from "../components/commonComponents/TagSelector"
+import type { TagName } from "../types/TagType"
 
 export default function HomePage(){
 
     const [filter, setFilter] = useState("")
     const dispatch = useAppDispatch()
     const {events, status} = useAppSelector((state: RootState) => state.events)
+    const [selectedTags, setSelectedTags] = useState<TagName[]>([])
 
     const filteredEvents = events.filter(e => 
         e.name.toLowerCase().includes(filter.toLowerCase())
+        && selectedTags.length !== 0 ? selectedTags.some(t => e.tags?.includes(t)) : true
     )
 
     useEffect(() => {
@@ -33,6 +37,11 @@ export default function HomePage(){
                 onChange={(e) => setFilter(e.target.value)}
                 />
             </div>
+
+            <div className="ml-3">
+                <TagSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+            </div>
+
             {status === 'loading' && <p className="text-center text-2xl">Loading...</p>}
             {status === 'succeeded' && <EventGrid events={filteredEvents}/>}
         </div>
