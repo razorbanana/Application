@@ -1,11 +1,11 @@
 import { useAppDispatch, useAppSelector } from "../app/store"
 import RowInput from "../components/formComponents/RowInput"
 import type { CreateEventRequestDto } from "../types/dtos/requests/CreateEventRequestDto"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { chooseEvent, createEvent } from "../app/slices/eventsSlice"
 import InputLabel from "../components/formComponents/InputLabel"
 import FormButton from "../components/formComponents/FormButton"
-import { validateField } from "../utils/validation/validateEvent"
+import { validateAll, validateField } from "../utils/validation/validateEvent"
 import { useNavigate } from "react-router"
 import TagSelector from "../components/commonComponents/TagSelector"
 import type { TagName } from "../types/TagType"
@@ -33,6 +33,10 @@ export default function CreateEventPage(){
         isPublic: true,
         tags: []
     })
+
+    useEffect(()=>{
+        validateAll(data, setErrors)
+    }, [])
 
     const [date, setDate] = useState(() => {
         const d = new Date(data.eventDate)

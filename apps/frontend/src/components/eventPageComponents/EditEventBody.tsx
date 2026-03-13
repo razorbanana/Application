@@ -9,6 +9,8 @@ import InputLabel from "../formComponents/InputLabel"
 import { updateEvent } from "../../app/slices/eventsSlice"
 import { type TagName } from "../../types/TagType"
 import TagSelector from "../commonComponents/TagSelector"
+import { validateAll } from "../../utils/validation/validateEvent"
+import { useEffect } from "react"
 
 type EditEventBodyProps = {
     event: EventType
@@ -35,6 +37,10 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
 
     const [date, setDate] = useState(data.eventDate.toISOString().slice(0, 10)) 
     const [time, setTime] = useState(data.eventDate.toTimeString().slice(0, 5))
+
+    useEffect(()=>{
+        validateAll(data, setErrors)
+    }, [])
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData({
