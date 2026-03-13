@@ -1,4 +1,4 @@
-import type { TagType } from "../TagType";
+import type { TagName } from "../TagType";
 
 export type EventDto = {
     id: string;
@@ -11,5 +11,5 @@ export type EventDto = {
     isPublic: boolean;
     isJoined: boolean;
     isOrganizer: boolean;
-    tags?: TagType[]
+    tags?: TagName[]
 }

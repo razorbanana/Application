@@ -38,7 +38,8 @@ export class EventsService {
       ...event,
       visitorCount: 0,
       isJoined: true,
-      isOrganizer: true
+      isOrganizer: true,
+      tags
     }
   }
 
@@ -75,7 +76,7 @@ export class EventsService {
     .addSelect('COUNT(DISTINCT participant.userId)::int', 'visitorCount') 
     .groupBy('event.id')
     .addSelect(
-      `json_agg(DISTINCT jsonb_build_object('id', tag.id, 'name', tag.name))
+      `json_agg(DISTINCT tag.name)
       FILTER (WHERE tag.id IS NOT NULL)`,
       'tags'
     )

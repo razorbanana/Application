@@ -9,8 +9,3 @@ export type TagName =
   | "education"
   | "networking"
   | "anime"
-
-export type TagType = {
-    id: string;
-    name: TagName;
-}

@@ -49,12 +49,9 @@ export class EventResponseDto {
 
   @ApiProperty({
     example: [
-      {
-        id: "38ecfb51-2...",
-        name: "music"
-      }
+      "music", "games"
     ],
     description: 'Tags of the event', 
   })
-  tags: Tag[]
+  tags: string[]
 }

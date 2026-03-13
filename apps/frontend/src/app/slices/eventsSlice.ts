@@ -51,7 +51,13 @@ export const updateEvent = createAsyncThunk(
     "events/updateEvent",
     async (event: {id: string, data: CreateEventRequestDto}) => {
         await updateEventRequest(event.id, event.data)
-        return event
+        return {
+            id: event.id,
+            data: {
+                ...event.data,
+                eventDate: event.data.eventDate.toISOString()
+            }
+        }
     }
 )
 
@@ -134,7 +140,6 @@ export const eventsSlice = createSlice(
                     ? {
                         ...event,
                         ...action.payload.data,
-                        eventDate: action.payload.data.eventDate.toISOString()
                     }
                     : event)
                 state.status = "succeeded"

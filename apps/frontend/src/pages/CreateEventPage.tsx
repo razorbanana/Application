@@ -9,6 +9,7 @@ import { validateField } from "../utils/validation/validateEvent"
 import { useNavigate } from "react-router"
 import TagSelector from "../components/commonComponents/TagSelector"
 import type { TagName } from "../types/TagType"
+import { addDays } from "date-fns"
 
 export default function CreateEventPage(){
     const status = useAppSelector(state => state.events.status)
@@ -27,7 +28,7 @@ export default function CreateEventPage(){
         name: "",
         description: "",
         location: "",
-        eventDate: new Date(),
+        eventDate: addDays(new Date(), 1),
         capacity: 100,
         isPublic: true,
         tags: []

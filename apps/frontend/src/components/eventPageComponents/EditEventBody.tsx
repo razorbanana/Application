@@ -7,6 +7,8 @@ import RowInput from "../formComponents/RowInput"
 import FormButton from "../formComponents/FormButton"
 import InputLabel from "../formComponents/InputLabel"
 import { updateEvent } from "../../app/slices/eventsSlice"
+import { type TagName } from "../../types/TagType"
+import TagSelector from "../commonComponents/TagSelector"
 
 type EditEventBodyProps = {
     event: EventType
@@ -21,12 +23,14 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
         location: "",
         eventDate: "",
         capacity: "",
+        tags: ""
     })
     const hasNoErrors = Object.values(errors).every(err => err === "")
     const {id, ...eventBody} = event
     const [data, setData] = useState<CreateEventRequestDto>({
         ...eventBody,
-        eventDate: new Date(eventBody.eventDate)
+        eventDate: new Date(eventBody.eventDate),
+        tags: event.tags ? event.tags : []
     })
 
     const [date, setDate] = useState(data.eventDate.toISOString().slice(0, 10)) 
@@ -38,6 +42,14 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
             [fieldName]: e.target.value
         })
         validateField(data, setErrors, fieldName, e.target.value)
+    }
+
+    const setChosenTags = (value: TagName[]) => {
+        setData(prev => ({
+            ...prev,
+            tags: value
+        }))
+        validateField(data, setErrors, "tags", value)
     }
 
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -96,6 +108,9 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
                     type="textarea"
                     error={errors.description}
                 />
+
+                <InputLabel label="Choose up to 5 tags for your event:" name="tags" optional={true}/>
+                <TagSelector selectedTags={data.tags} setSelectedTags={setChosenTags} error={errors.tags}/>
 
                 <div className="flex justify-between w-full">
                     <RowInput 
