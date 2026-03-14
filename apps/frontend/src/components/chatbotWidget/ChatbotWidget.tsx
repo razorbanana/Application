@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Rnd } from "react-rnd"
 import { useAppDispatch, useAppSelector } from "../../app/store"
 import ChatbotMessage from "./ChatbotMessage"
-import { sendMessage } from "../../app/slices/chatbotSlice"
+import { addMessage, sendMessage } from "../../app/slices/chatbotSlice"
 import ChatbotInput from "./ChatbotInput"
 
 type ChatbotWidgetProps = {
@@ -11,13 +11,15 @@ type ChatbotWidgetProps = {
 
 export default function ChatbotWidget ({}:ChatbotWidgetProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false)
-    const {messages, status, error} = useAppSelector(state => state.chatbot)
+    const {messages, status} = useAppSelector(state => state.chatbot)
     const [message, setMessage] = useState("")
     const dispatch = useAppDispatch()
 
     const submitMessage = () => {
         if (!message.trim()) return
+        dispatch(addMessage(message))
         dispatch(sendMessage(message))
+        setMessage("")
     }
 
     return (

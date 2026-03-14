@@ -15,7 +15,6 @@ export default function ChatbotInput ({message, setMessage, submitMessage, statu
             onKeyDown={(e) => {
             if (e.key === "Enter" && message.trim()) {
                 submitMessage()
-                setMessage("")
             }
             }}
             placeholder="Ask something..."
@@ -26,7 +25,6 @@ export default function ChatbotInput ({message, setMessage, submitMessage, statu
             disabled={status === "loading" || !message.trim()}
             onClick={() => {
             submitMessage()
-            setMessage("")
             }}
             className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:bg-gray-400"
         >

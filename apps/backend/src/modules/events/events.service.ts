@@ -128,7 +128,7 @@ export class EventsService {
 
     const participantRecords = await this.participantsRepository.find({
       where: {userId},
-      relations: ['event']
+      relations: ['event', 'event.tags']
     })
 
     const events = participantRecords.map(record => record.event)
@@ -142,7 +142,8 @@ export class EventsService {
         }))
         return {
           ...event,
-          participantsWithoutUsername
+          participants: participantsWithoutUsername,
+          tags: event.tags?.map(tag => tag.name)
         }
       })
     )
@@ -152,7 +153,8 @@ export class EventsService {
 
   async findAllPublicWithParticipants(){
     const events = await this.eventsRepository.find({
-      where: {isPublic: true}
+      where: {isPublic: true},
+      relations: ['tags']
     })
 
     const eventsWithParticipants = await Promise.all(
@@ -164,7 +166,8 @@ export class EventsService {
         }))
         return {
           ...event,
-          participantsWithoutUsername
+          participants: participantsWithoutUsername,
+          tags: event.tags?.map(tag => tag.name)
         }
       })
     )
