@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import Navbar from "./navigationBar/Navbar";
 import { AuthInitializer } from "./AuthInitializer";
+import ChatbotWidget from "./chatbotWidget/chatbotWidget";
 
 
 
@@ -12,6 +13,7 @@ export default function RootLayout(){
             <main className="content">
                 <Outlet /> 
             </main>
+            <ChatbotWidget />
         </div>
     )
 }
