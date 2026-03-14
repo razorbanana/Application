@@ -124,6 +124,54 @@ export class EventsService {
     return participantRecords.map(record => record.event)
   }
 
+  async findMyWithParticipants(userId: string){
+
+    const participantRecords = await this.participantsRepository.find({
+      where: {userId},
+      relations: ['event']
+    })
+
+    const events = participantRecords.map(record => record.event)
+
+    const eventsWithParticipants = await Promise.all(
+      events.map(async (event) => {
+        const participants = await this.findEventParticipants(event.id)
+        const participantsWithoutUsername = participants.map(p => ({
+          fullName: p.fullName,
+          userRole: p.userRole
+        }))
+        return {
+          ...event,
+          participantsWithoutUsername
+        }
+      })
+    )
+
+    return eventsWithParticipants
+  }
+
+  async findAllPublicWithParticipants(){
+    const events = await this.eventsRepository.find({
+      where: {isPublic: true}
+    })
+
+    const eventsWithParticipants = await Promise.all(
+      events.map(async (event) => {
+        const participants = await this.findEventParticipants(event.id)
+        const participantsWithoutUsername = participants.map(p => ({
+          fullName: p.fullName,
+          userRole: p.userRole
+        }))
+        return {
+          ...event,
+          participantsWithoutUsername
+        }
+      })
+    )
+
+    return eventsWithParticipants
+  }
+
   async findEventParticipants(eventId: string){
     const participantRecords = await this.participantsRepository.find({
       where: {eventId},

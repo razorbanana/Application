@@ -6,12 +6,32 @@ import { chatSchema } from './schemas/chat.schema';
 import { OptionalAuthGuard } from '../auth/guards/optional.guard';
 import { GetUser } from 'src/utils/decorators/getUser.decorator';
 import { type JwtPayload } from 'src/utils/decorators/getUser.decorator';
+import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('chatbot')
 export class ChatbotController {
   constructor(private readonly chatbotService: ChatbotService) {}
 
   @UseGuards(OptionalAuthGuard)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' }
+      }
+    },
+    examples: 
+      {
+        nextEventVisitors: {
+          value: {
+            message: "Please tell me what you know about visitors of the next event"
+          }
+        }
+      }
+  })
+  @ApiOkResponse({
+    description: 'The response from chatbot',
+  })
   @Post()
   async chat(@GetUser() user: JwtPayload | null, @Body(new YupValidationPipe(chatSchema)) chatDto: ChatDto) {
     return this.chatbotService.getChatResponse(user, chatDto);

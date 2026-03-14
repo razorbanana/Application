@@ -16,12 +16,14 @@ export class ChatbotService {
   private groq = new Groq({apiKey: process.env.GROQ_API_KEY})
 
   async getChatResponse (user: JwtPayload | null, chatDto: ChatDto){
-    const myEvents = user ? await this.eventsService.findUserEvents(user.sub) : null
-    const allEvents = await this.eventsService.findAll()
+    const myEvents = user ? await this.eventsService.findMyWithParticipants(user.sub) : null
+    const allEvents = await this.eventsService.findAllPublicWithParticipants()
     const systemPrompt = `
       You are a helpful event assistant. Here is the data:
       ${myEvents ? "- User's Events:" + JSON.stringify(myEvents) : "User is unauthorized, provide him with public information"}
       - All Events: ${JSON.stringify(allEvents)}
+      Do not include participants and publicity if not requested by user.
+      The request was sent on ${new Date().toISOString()}
       If a question is unclear or not related to this data, 
       respond exactly with: "Sorry, I didn’t understand that. Please try rephrasing your question."
 
