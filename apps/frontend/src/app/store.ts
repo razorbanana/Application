@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice"
 import eventsReducer from "./slices/eventsSlice"
+import chatbotReducer from "./slices/chatbotSlice"
 import { useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        events: eventsReducer
+        events: eventsReducer,
+        chatbot: chatbotReducer,
     }
 })
 

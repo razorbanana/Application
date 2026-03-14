@@ -1,5 +1,9 @@
 import { useState } from "react"
 import { Rnd } from "react-rnd"
+import { useAppDispatch, useAppSelector } from "../../app/store"
+import ChatbotMessage from "./ChatbotMessage"
+import { sendMessage } from "../../app/slices/chatbotSlice"
+import ChatbotInput from "./ChatbotInput"
 
 type ChatbotWidgetProps = {
 
@@ -7,6 +11,14 @@ type ChatbotWidgetProps = {
 
 export default function ChatbotWidget ({}:ChatbotWidgetProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false)
+    const {messages, status, error} = useAppSelector(state => state.chatbot)
+    const [message, setMessage] = useState("")
+    const dispatch = useAppDispatch()
+
+    const submitMessage = () => {
+        if (!message.trim()) return
+        dispatch(sendMessage(message))
+    }
 
     return (
         <Rnd 
@@ -34,11 +46,11 @@ export default function ChatbotWidget ({}:ChatbotWidgetProps) {
                     !collapsed && (
                         <>
                             <div className="flex-1 overflow-y-auto p-3 text-sm">
-                                {/* Bit messages */}
+                                {messages.map((m, i) => (
+                                    <ChatbotMessage key={i} message={m} />
+                                ))}
                             </div>
-                            <div className="border-t p-2">
-                                <input placeholder="Ask something..." className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-blue-500"/>
-                            </div>
+                            <ChatbotInput message={message} setMessage={setMessage} status={status} submitMessage={submitMessage}/>
                         </>
                     )
                 }
