@@ -11,6 +11,6 @@ import { ChatbotModule } from './modules/chatbot/chatbot.module';
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware)
+    consumer.apply(LoggerMiddleware).forRoutes("*")
   }
 }
