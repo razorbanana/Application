@@ -10,6 +10,7 @@ import { loginUser } from "./authReducers/loginUser.reducer";
 import { registerUser } from "./authReducers/registerUser.reducer";
 import { fetchCurrentUser } from "./authReducers/fetchUser.reducer";
 import { updateCurrentUser } from "./authReducers/updateUser.refucer";
+import { useChatbotStore } from "../chatbotStore";
 
 export interface AuthState {
   user: UserType | null;
@@ -37,6 +38,7 @@ export const authSlice = createSlice({
             state.access_token = null
             state.user = null
             localStorage.removeItem('access_token')
+            useChatbotStore.getState().reset()
         },
         pullTokenFromStorage: (state) => {
             const token = localStorage.getItem("access_token")

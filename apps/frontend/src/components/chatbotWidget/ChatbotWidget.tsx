@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { Rnd } from "react-rnd"
-import { useAppDispatch, useAppSelector } from "../../app/store"
-import { addMessage, sendMessage } from "../../app/slices/chatbotSlice"
+//import { useAppDispatch, useAppSelector } from "../../app/store"
+//import { addMessage, sendMessage } from "../../app/slices/chatbotSlice"
 import ChatbotInput from "./ChatbotInput"
 import ChatbotMessageList from "./ChatbotMessageList"
+import { useChatbotStore } from "../../app/chatbotStore"
 
 type ChatbotWidgetProps = {
     initialCollapsed?: boolean
@@ -14,9 +15,10 @@ export default function ChatbotWidget ({initialCollapsed=false}:ChatbotWidgetPro
     const [size, setSize] = useState({width: 320, height: 420})
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
     const [position, setPosition] = useState({ x: window.innerWidth - 50, y: window.innerHeight - 100 })
-    const {status} = useAppSelector(state => state.chatbot)
+    //const {status} = useAppSelector(state => state.chatbot)
+    const {status, addMessage, sendMessage} = useChatbotStore()
     const [message, setMessage] = useState("")
-    const dispatch = useAppDispatch()
+    //const dispatch = useAppDispatch()
 
     useEffect(() => {
         const handleResize = () => setWindowSize({width: window.innerWidth, height: window.innerHeight})
@@ -39,8 +41,10 @@ export default function ChatbotWidget ({initialCollapsed=false}:ChatbotWidgetPro
 
     const submitMessage = () => {
         if (!message.trim()) return
-        dispatch(addMessage(message))
-        dispatch(sendMessage(message))
+        //dispatch(addMessage(message))
+        //dispatch(sendMessage(message))
+        addMessage(message)
+        sendMessage(message)
         setMessage("")
     }
 

@@ -1,4 +1,5 @@
-import { useAppSelector } from "../../app/store"
+//import { useAppSelector } from "../../app/store"
+import { useChatbotStore } from "../../app/chatbotStore"
 import ChatbotMessage from "./ChatbotMessage"
 import { useEffect, useRef } from "react"
 
@@ -6,7 +7,8 @@ type ChatbotMessageListProps = {
 }
 
 export default function ChatbotMessageList ({}:ChatbotMessageListProps) {
-    const {messages, status } = useAppSelector(state => state.chatbot)
+    //const {messages, status } = useAppSelector(state => state.chatbot)
+    const {messages, status} = useChatbotStore()
     const bottomRef = useRef<HTMLDivElement | null>(null)
     
     useEffect(()=>{
