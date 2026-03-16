@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { Rnd } from "react-rnd"
 import { useAppDispatch, useAppSelector } from "../../app/store"
-import ChatbotMessage from "./ChatbotMessage"
 import { addMessage, sendMessage } from "../../app/slices/chatbotSlice"
 import ChatbotInput from "./ChatbotInput"
+import ChatbotMessageList from "./ChatbotMessageList"
 
 type ChatbotWidgetProps = {
 
@@ -12,7 +12,7 @@ type ChatbotWidgetProps = {
 export default function ChatbotWidget ({}:ChatbotWidgetProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false)
     const [size, setSize] = useState({width: 320, height: 420})
-    const {messages, status} = useAppSelector(state => state.chatbot)
+    const {status} = useAppSelector(state => state.chatbot)
     const [message, setMessage] = useState("")
     const dispatch = useAppDispatch()
 
@@ -62,11 +62,7 @@ export default function ChatbotWidget ({}:ChatbotWidgetProps) {
                 {
                     !collapsed && (
                         <>
-                            <div className="flex-1 overflow-y-auto p-3 text-sm">
-                                {messages.map((m, i) => (
-                                    <ChatbotMessage key={i} message={m} />
-                                ))}
-                            </div>
+                            <ChatbotMessageList />
                             <ChatbotInput message={message} setMessage={setMessage} status={status} submitMessage={submitMessage}/>
                         </>
                     )
