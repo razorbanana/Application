@@ -1,5 +1,5 @@
-import type { TagName } from "../../types/TagType"
-import { tagConfig } from "../../utils/config/tagConfig"
+import type { TagName } from "../../../types/TagType"
+import { tagConfig } from "../../../utils/config/tagConfig"
 import TagChip from "./TagChip"
 
 type TagSelectorProps = {

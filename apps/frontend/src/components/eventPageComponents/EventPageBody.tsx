@@ -7,9 +7,9 @@ import ParticipantList from "./ParticipantList";
 import { useEffect, useState } from "react";
 import { getEventParticipants } from "../../services/eventsApi";
 import type { ParticipantType } from "../../types/ParticipantType";
-import ConfirmationModal from "../commonComponents/ConfirmationModal";
+import ConfirmationModal from "../commonComponents/confirmationModal/ConfirmationModal";
 import EventCardButton from "../commonComponents/EventCardButton";
-import Tags from "../commonComponents/Tags";
+import Tags from "../commonComponents/tags/Tags";
 
 type EventPageBodyProps = {
     event: EventType

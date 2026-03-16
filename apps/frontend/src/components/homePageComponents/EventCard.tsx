@@ -6,8 +6,8 @@ import { chooseEvent, joinEvent, leaveEvent, deleteEvent } from "../../app/slice
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import EventCardButton from "../commonComponents/EventCardButton";
-import ConfirmationModal from "../commonComponents/ConfirmationModal";
-import Tags from "../commonComponents/Tags";
+import ConfirmationModal from "../commonComponents/confirmationModal/ConfirmationModal";
+import Tags from "../commonComponents/tags/Tags";
 
 export default function EventCard ({event}: {event: EventType}) {
     const dispatch = useAppDispatch()

@@ -8,7 +8,7 @@ import FormButton from "../formComponents/FormButton"
 import InputLabel from "../formComponents/InputLabel"
 import { updateEvent } from "../../app/slices/eventsSlice"
 import { type TagName } from "../../types/TagType"
-import TagSelector from "../commonComponents/TagSelector"
+import TagSelector from "../commonComponents/tags/TagSelector"
 import { validateAll } from "../../utils/validation/validateEvent"
 import { useEffect } from "react"
 

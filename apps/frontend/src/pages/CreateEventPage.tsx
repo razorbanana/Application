@@ -7,7 +7,7 @@ import InputLabel from "../components/formComponents/InputLabel"
 import FormButton from "../components/formComponents/FormButton"
 import { validateAll, validateField } from "../utils/validation/validateEvent"
 import { useNavigate } from "react-router"
-import TagSelector from "../components/commonComponents/TagSelector"
+import TagSelector from "../components/commonComponents/tags/TagSelector"
 import type { TagName } from "../types/TagType"
 import { addDays } from "date-fns"
 

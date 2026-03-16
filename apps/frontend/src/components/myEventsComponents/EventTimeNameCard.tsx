@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../app/store"
 import { chooseEvent } from "../../app/slices/eventsSlice"
 import { useNavigate } from "react-router"
 import type { TagName } from "../../types/TagType"
-import Tags from "../commonComponents/Tags"
+import Tags from "../commonComponents/tags/Tags"
 
 type EventTimeNameCardProps = {
     name: string,

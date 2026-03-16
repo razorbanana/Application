@@ -6,11 +6,11 @@ import ChatbotInput from "./ChatbotInput"
 import ChatbotMessageList from "./ChatbotMessageList"
 
 type ChatbotWidgetProps = {
-
+    initialCollapsed?: boolean
 }
 
-export default function ChatbotWidget ({}:ChatbotWidgetProps) {
-    const [collapsed, setCollapsed] = useState<boolean>(false)
+export default function ChatbotWidget ({initialCollapsed=false}:ChatbotWidgetProps) {
+    const [collapsed, setCollapsed] = useState<boolean>(initialCollapsed)
     const [size, setSize] = useState({width: 320, height: 420})
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
     const [position, setPosition] = useState({ x: window.innerWidth - 50, y: window.innerHeight - 100 })

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { fetchAllEvents } from "../app/slices/eventsSlice"
 import EventGrid from "../components/homePageComponents/EventGrid"
 import { Search } from "lucide-react"
-import TagSelector from "../components/commonComponents/TagSelector"
+import TagSelector from "../components/commonComponents/tags/TagSelector"
 import type { TagName } from "../types/TagType"
 
 export default function HomePage(){

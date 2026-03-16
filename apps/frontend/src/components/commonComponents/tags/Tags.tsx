@@ -1,4 +1,4 @@
-import type { TagName } from "../../types/TagType"
+import type { TagName } from "../../../types/TagType"
 import TagChip from "./TagChip"
 
 type EventCardTagsProps = {
