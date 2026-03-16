@@ -7,6 +7,7 @@ import { OptionalAuthGuard } from '../auth/guards/optional.guard';
 import { GetUser } from 'src/utils/decorators/getUser.decorator';
 import { type JwtPayload } from 'src/utils/decorators/getUser.decorator';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('chatbot')
 export class ChatbotController {
@@ -35,6 +36,12 @@ export class ChatbotController {
   @Post()
   async chat(@GetUser() user: JwtPayload | null, @Body(new YupValidationPipe(chatSchema)) chatDto: ChatDto) {
     return this.chatbotService.getChatResponse(user, chatDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("history")
+  async getHistory(@GetUser() user: JwtPayload){
+    return this.chatbotService.getChatHistory(user)
   }
 
 }

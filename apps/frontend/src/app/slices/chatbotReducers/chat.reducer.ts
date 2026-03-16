@@ -21,7 +21,7 @@ export function chatBuilderCases (builder: ActionReducerMapBuilder<ChatBotState>
             state.status = "loading"
         })
         .addCase(sendMessage.fulfilled, (state, action) => {
-            state.messages = state.messages.concat([{sender: "chatbot", message: action.payload}])
+            state.messages = state.messages.concat([{sender: "assistant", message: action.payload}])
             state.status = "succeeded"
         })
         .addCase(sendMessage.rejected, (state, action) => {

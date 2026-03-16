@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../app/store"
 import { fetchCurrentUser, logout } from "../app/slices/authSlice"
 import { fetchAllEvents } from "../app/slices/eventsSlice"
+import { fetchHistory } from "../app/slices/chatbotSlice"
 
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
@@ -9,6 +10,7 @@ export const AuthInitializer = () => {
 
     useEffect(()=>{
         isLoggedIn && dispatch(fetchCurrentUser())
+        isLoggedIn && dispatch(fetchHistory())
         if (!isLoggedIn){
             dispatch(logout())
         }

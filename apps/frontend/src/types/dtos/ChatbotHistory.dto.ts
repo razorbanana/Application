@@ -1,0 +1,1 @@
+export type ChatbotHistoryDto = { role: "user" | "assistant" | "system"; content: string; }[]
