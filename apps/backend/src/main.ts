@@ -4,6 +4,14 @@ import cors from "cors"
 import { CatchEverythingFilter } from './utils/filters/catch-everything.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+});
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cors())
