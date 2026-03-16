@@ -6,9 +6,13 @@ import { type CreateEventRequestDto } from "../../../types/dtos/requests/CreateE
 
 export const createEvent = createAsyncThunk(
     "events/createEvent",
-    async (data: CreateEventRequestDto) => {
-        const response = await createEventRequest(data)
-        return response
+    async (data: CreateEventRequestDto, {rejectWithValue}) => {
+        try{
+            const response = await createEventRequest(data)
+            return response
+        }catch(err: any){
+            return rejectWithValue(err.response?.data?.message || "Failed to create an event")
+        }
     }
 )
 
@@ -22,8 +26,9 @@ export function createEventBuilderCases (builder: ActionReducerMapBuilder<Events
             state.events = state.events.concat(action.payload)
             state.status = "succeeded"
         })
-        .addCase(createEvent.rejected, (state) => {
+        .addCase(createEvent.rejected, (state, action) => {
             state.status = "failed"
+            state.error = action.payload as string
         })
 
     return builder

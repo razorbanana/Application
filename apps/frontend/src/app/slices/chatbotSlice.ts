@@ -5,6 +5,7 @@ import { fetchHistoryBuilderCases } from "./chatbotReducers/getHistory.reducer";
 
 import { fetchHistory } from "./chatbotReducers/getHistory.reducer";
 import { sendMessage } from "./chatbotReducers/chat.reducer";
+import { logout } from "./authSlice";
 
 export type Message = {
     sender: "user" | "assistant" | "system",
@@ -37,6 +38,10 @@ export const chatbotSlice = createSlice({
     extraReducers: (builder) => {
         chatBuilderCases(builder)
         fetchHistoryBuilderCases(builder)
+        .addCase(logout, (state) => {
+            state.messages = [],
+            state.status = "idle"
+        })
     }
 })
 

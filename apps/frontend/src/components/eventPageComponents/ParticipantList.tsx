@@ -13,6 +13,7 @@ export default function ParticipantList ({participants}:{participants: Participa
                     )
                 })
             }
+            {participants.length === 0 && <div className="text-center pt-1 text-lg">Loading...</div>}
         </div>
     )
 }

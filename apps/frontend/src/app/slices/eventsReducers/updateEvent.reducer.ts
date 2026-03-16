@@ -6,14 +6,18 @@ import { type CreateEventRequestDto } from "../../../types/dtos/requests/CreateE
 
 export const updateEvent = createAsyncThunk(
     "events/updateEvent",
-    async (event: {id: string, data: CreateEventRequestDto}) => {
-        await updateEventRequest(event.id, event.data)
-        return {
-            id: event.id,
-            data: {
-                ...event.data,
-                eventDate: event.data.eventDate.toISOString()
+    async (event: {id: string, data: CreateEventRequestDto}, {rejectWithValue}) => {
+        try{
+            await updateEventRequest(event.id, event.data)
+            return {
+                id: event.id,
+                data: {
+                    ...event.data,
+                    eventDate: event.data.eventDate.toISOString()
+                }
             }
+        }catch(err: any){
+            return rejectWithValue(err.response?.data?.message || "Failed to update event")
         }
     }
 )
@@ -34,8 +38,9 @@ export function updateEventBuilderCases (builder: ActionReducerMapBuilder<Events
                 : event)
             state.status = "succeeded"
         })
-        .addCase(updateEvent.rejected, (state) => {
+        .addCase(updateEvent.rejected, (state, action) => {
             state.status = "failed"
+            state.error = action.payload as string
         })
 
     return builder

@@ -42,7 +42,7 @@ export default function HomePage(){
                 <TagSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
             </div>
 
-            {status === 'loading' && <p className="text-center text-2xl">Loading...</p>}
+            {status === 'loading' && <p className="text-center text-2xl mt-5">Loading...</p>}
             {status === 'succeeded' && <EventGrid events={filteredEvents}/>}
         </div>
     )

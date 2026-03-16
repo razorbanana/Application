@@ -18,6 +18,9 @@ export const loginUser = createAsyncThunk(
 
 export function loginUserBuilderCases (builder: ActionReducerMapBuilder<AuthState>) {
     builder
+        .addCase(loginUser.pending, (state) => {
+            state.status = "loading"
+        })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.access_token = action.payload.access_token
             state.user = action.payload.user

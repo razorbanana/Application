@@ -18,13 +18,15 @@ import { deleteEventBuilderCases } from "./eventsReducers/deleteEvent.reducer";
 export type EventsState = {
     events: EventType[],
     status: 'idle' | 'loading' | 'succeeded' | 'failed',
-    chosenEventId: string | null
+    chosenEventId: string | null,
+    error: string | null
 }
 
 const initialState: EventsState = {
     events: [],
     status: "idle",
-    chosenEventId: null
+    chosenEventId: null,
+    error: null
 }
 
 export const eventsSlice = createSlice(
@@ -35,6 +37,9 @@ export const eventsSlice = createSlice(
             chooseEvent: (state, action)=>{
                 state.chosenEventId = action.payload
             },
+            eraseError: (state) => {
+                state.error = null
+            }
         },
         extraReducers: (builder) => {
             fetchAllEventsBuilderCases(builder)
@@ -49,4 +54,4 @@ export const eventsSlice = createSlice(
 
 export default eventsSlice.reducer
 export { fetchAllEvents, joinEvent, leaveEvent, createEvent, updateEvent, deleteEvent }
-export const { chooseEvent } = eventsSlice.actions;
+export const { chooseEvent, eraseError } = eventsSlice.actions;

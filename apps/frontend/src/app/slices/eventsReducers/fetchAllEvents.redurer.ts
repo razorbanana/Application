@@ -6,9 +6,13 @@ import { getAllEvents } from "../../../services/eventsApi"
 
 export const fetchAllEvents = createAsyncThunk(
     "events/fetchAll",
-    async () => {
-        const response = await getAllEvents()
-        return response
+    async (_, {rejectWithValue}) => {
+        try{
+            const response = await getAllEvents()
+            return response
+        }catch(err: any){
+            return rejectWithValue(err.response?.data?.message || "Failed to load events")
+        }
     }
 )
 
@@ -21,8 +25,9 @@ export function fetchAllEventsBuilderCases (builder: ActionReducerMapBuilder<Eve
             state.status = "succeeded"
             state.events = action.payload
         })
-        .addCase(fetchAllEvents.rejected, (state) => {
+        .addCase(fetchAllEvents.rejected, (state, action) => {
             state.status = "failed"
+            state.error = action.payload as string
         })
 
     return builder

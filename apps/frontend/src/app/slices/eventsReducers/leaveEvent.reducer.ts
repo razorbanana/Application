@@ -5,9 +5,13 @@ import { leaveEventById } from "../../../services/eventsApi"
 
 export const leaveEvent = createAsyncThunk(
     "events/leaveEvent",
-    async (eventId: string) => {
-        await leaveEventById(eventId)
-        return eventId
+    async (eventId: string, {rejectWithValue}) => {
+        try{
+            await leaveEventById(eventId)
+            return eventId
+        }catch(err: any){
+            return rejectWithValue(err.response?.data?.message || "Failed to leave event")
+        }
     }
 )
 
@@ -25,8 +29,9 @@ export function leaveEventBuilderCases (builder: ActionReducerMapBuilder<EventsS
                 visitorCount: event.visitorCount - 1
             } : event)
         })
-        .addCase(leaveEvent.rejected, (state) => {
+        .addCase(leaveEvent.rejected, (state, action) => {
             state.status = "failed"
+            state.error = action.payload as string
         })
 
     return builder
