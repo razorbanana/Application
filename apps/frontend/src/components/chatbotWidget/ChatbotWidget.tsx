@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Rnd } from "react-rnd"
 import { useAppDispatch, useAppSelector } from "../../app/store"
 import { addMessage, sendMessage } from "../../app/slices/chatbotSlice"
@@ -12,9 +12,30 @@ type ChatbotWidgetProps = {
 export default function ChatbotWidget ({}:ChatbotWidgetProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false)
     const [size, setSize] = useState({width: 320, height: 420})
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    const [position, setPosition] = useState({ x: window.innerWidth - 50, y: window.innerHeight - 100 })
     const {status} = useAppSelector(state => state.chatbot)
     const [message, setMessage] = useState("")
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const handleResize = () => setWindowSize({width: window.innerWidth, height: window.innerHeight})
+        window.addEventListener("resize", handleResize)
+        return () => window.removeEventListener("resize", handleResize)
+    }, [])
+
+    const adjustPosition = (adjustedPosition: {x: number, y: number}) => {
+        const maxX = windowSize.width - size.width - 30
+        const maxY = windowSize.height - size.height - 30
+        setPosition({
+            x: Math.min(adjustedPosition.x, maxX),
+            y: Math.min(adjustedPosition.y, maxY)
+        })
+    }
+
+    useEffect(() => {
+        adjustPosition(position)
+    }, [windowSize, size])
 
     const submitMessage = () => {
         if (!message.trim()) return
@@ -36,13 +57,15 @@ export default function ChatbotWidget ({}:ChatbotWidgetProps) {
         <Rnd 
             default={
                 {
-                    x: window.innerWidth - 360,
-                    y: window.innerHeight - 500,
-                    width: 320,
-                    height: 420
+                    x: position.x,
+                    y: position.y,
+                    width: size.width,
+                    height: size.height
                 }
             }
             size={size}
+            position={position}
+            onDragStop={(_, d) => adjustPosition({ x: d.x, y: d.y })}
             onResizeStop={(e, _, ref) => {
                 e.preventDefault()
                 !collapsed && setSize({width: parseInt(ref.style.width), height: parseInt(ref.style.height)})
