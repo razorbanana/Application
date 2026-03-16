@@ -7,6 +7,7 @@ import { fetchHistory } from "../app/slices/chatbotSlice"
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => !!state.auth.access_token)
+    const initialized = useAppSelector(state => state.auth.initialized)
 
     useEffect(()=>{
         isLoggedIn && dispatch(fetchCurrentUser())
@@ -18,7 +19,7 @@ export const AuthInitializer = () => {
 
     useEffect(() => {
         dispatch(fetchAllEvents())
-    }, [isLoggedIn])
+    }, [isLoggedIn, initialized])
 
     return null
 }

@@ -20,10 +20,12 @@ export function fetchUserBuilderCases (builder: ActionReducerMapBuilder<AuthStat
         .addCase(fetchCurrentUser.fulfilled, (state, action) => {
             state.user = action.payload
             state.status = "succeeded"
+            state.initialized = true
         })
         .addCase(fetchCurrentUser.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.payload as string
+            state.initialized = true
         })
 
     return builder

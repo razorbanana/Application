@@ -16,6 +16,7 @@ export interface AuthState {
   access_token: string | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  initialized: boolean
 }
 
 const accessTokenFromStorage = localStorage.getItem("access_token");
@@ -25,6 +26,7 @@ const initialState: AuthState = {
     access_token: accessTokenFromStorage,
     status: 'idle',
     error: null,
+    initialized: false
 }
 
 export const authSlice = createSlice({
