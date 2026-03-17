@@ -1,6 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
-import { timestamp } from "rxjs";
 
 @Catch()
 export class CatchEverythingFilter implements ExceptionFilter {

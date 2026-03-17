@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
 import { Participant } from "./participant.entity";
+import { Tag } from "./tag.entity";
 
 @Entity()
 export class Event {
@@ -26,4 +27,10 @@ export class Event {
 
     @OneToMany(() => Participant, (participant) => participant.event)
     participants: Participant[]
+
+    @ManyToMany(() => Tag, (tag) => tag.events)
+    @JoinTable({
+        name: "event_tags",
+    })
+    tags: Tag[]
 }

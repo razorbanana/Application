@@ -2,13 +2,19 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../app/store"
 import { fetchCurrentUser, logout } from "../app/slices/authSlice"
 import { fetchAllEvents } from "../app/slices/eventsSlice"
+import { useChatbotStore } from "../app/chatbotStore"
+//import { fetchHistory } from "../app/slices/chatbotSlice"
 
 export const AuthInitializer = () => {
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => !!state.auth.access_token)
+    const initialized = useAppSelector(state => state.auth.initialized)
+    const {fetchHistory} = useChatbotStore()
 
     useEffect(()=>{
         isLoggedIn && dispatch(fetchCurrentUser())
+        // isLoggedIn && dispatch(fetchHistory())
+        isLoggedIn && fetchHistory()
         if (!isLoggedIn){
             dispatch(logout())
         }
@@ -16,7 +22,7 @@ export const AuthInitializer = () => {
 
     useEffect(() => {
         dispatch(fetchAllEvents())
-    }, [isLoggedIn])
+    }, [isLoggedIn, initialized])
 
     return null
 }

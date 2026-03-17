@@ -5,12 +5,14 @@ import { User } from "../entities/user.entity";
 import { RegisterDto } from "src/modules/auth/dto/register.dto";
 import { Event } from "../entities/event.entity";
 import { JoinEventDto } from "src/modules/events/dto/join-event.dto";
+import { Tag } from "../entities/tag.entity";
 
 async function seed(){
     const dataSource = await databaseProviders[0].useFactory()
     const userRepo = dataSource.getRepository(User)
     const eventRepo = dataSource.getRepository(Event)
     const participantRepo = dataSource.getRepository(Participant)
+    const tagRepo = dataSource.getRepository(Tag)
 
     const usersData : RegisterDto[] = [
         {
@@ -48,7 +50,24 @@ async function seed(){
         users.push(result)
     }
 
-    const eventsData: CreateEventDto[] = [
+    const tagNames = [
+        { "name": "games" },
+        { "name": "music" },
+        { "name": "sports" },
+        { "name": "food" },
+        { "name": "outdoors" },
+        { "name": "technology" },
+        { "name": "art" },
+        { "name": "education" },
+        { "name": "networking" },
+        { "name": "anime" }
+    ]
+
+    for (const tag of tagNames) {
+        const t = await tagRepo.save(tagRepo.create(tag))
+    }
+
+    const eventsData = [
         {
             name: "Tech Meetup SF",
             description: "A casual meetup for software developers to share ideas.",

@@ -2,7 +2,7 @@ import type { ParticipantType } from "../../types/ParticipantType";
 
 export default function ParticipantList ({participants}:{participants: ParticipantType[]}) {
     return (
-        <div className="w-full pb-6">
+        <div className="w-full pb-6 mt-8">
             <p className="text-center text-lg font-bold">List of participants:</p>
             {
                 participants.map(par => {
@@ -13,6 +13,7 @@ export default function ParticipantList ({participants}:{participants: Participa
                     )
                 })
             }
+            {participants.length === 0 && <div className="text-center pt-1 text-lg">Loading...</div>}
         </div>
     )
 }

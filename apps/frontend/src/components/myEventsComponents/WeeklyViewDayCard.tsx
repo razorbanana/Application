@@ -13,7 +13,18 @@ export default function WeeklyViewDayCard({events, day}: WeeklyViewDayCardProps)
             <div className="group rounded-lg border-gray-300 border px-2 py-3 text-sm hover:border-blue-300 cursor-pointer">
                 <p className="font-bold">{format(day, "EEE")}</p>
                 <p className="text-gray-600 group-hover:text-blue-600 mb-2">{format(day, "dd")}</p>
-                {events && events?.length !== 0 ? events?.map(event => <EventTimeNameCard key={event.name} date={new Date(event.eventDate)} name={event.name} eventId={event.id}/>): "No events"}
+                {
+                events && events?.length !== 0 
+                ? events?.map(event => 
+                    <EventTimeNameCard 
+                        key={event.name} 
+                        date={new Date(event.eventDate)} 
+                        name={event.name} 
+                        eventId={event.id}
+                        tags={event.tags}
+                    />)
+                : "No events"
+                }
             </div>
         )
 }

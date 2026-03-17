@@ -20,7 +20,16 @@ export default function MonthlyViewDayCard({events, day, blank=false}: MonthlyVi
     return (
         <div className="group border-gray-300 border px-2 py-3 text-sm hover:border-blue-300 cursor-pointer min-h-20">
             <p className="text-gray-600 group-hover:text-blue-600 mb-2">{format(day, "dd")}</p>
-            {events && events?.length !== 0 ? events?.map(event => <EventTimeNameCard key={event.name} date={new Date(event.eventDate)} name={event.name} eventId={event.id}/>): ""}
+            {events && events?.length !== 0 
+            ? events?.map(event => 
+                <EventTimeNameCard 
+                    key={event.name} 
+                    date={new Date(event.eventDate)} 
+                    name={event.name} 
+                    eventId={event.id}
+                    tags={event.tags}
+                />)
+            : ""}
         </div>
     )
 }

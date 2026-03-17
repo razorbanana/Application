@@ -3,6 +3,7 @@ import { Participant } from "./participant.entity";
 import { Exclude } from "class-transformer";
 import * as bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
+import { BotMessage } from "./bot-message.entity";
 dotenv.config()
 
 @Entity()
@@ -37,4 +38,7 @@ export class User {
 
     @OneToMany(() => Participant, (participant) => participant.user)
     events: Participant[]
+
+    @OneToMany(() => BotMessage, (message) => message.user)
+    botMessages: BotMessage[]
 }

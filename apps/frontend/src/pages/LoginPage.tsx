@@ -18,7 +18,7 @@ export default function LoginPage(){
     return(
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
             {mode === "login" ? <LoginForm toggleMode={() => setMode("register")}/> : <RegistrationForm toggleMode={() => setMode("login")}/>}
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500">Please try again</p>}
         </div>
     )
 }

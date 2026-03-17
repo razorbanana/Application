@@ -28,8 +28,8 @@ export default function EventPage(){
             ? event.isOrganizer && <Pencil className={`${basicPencilClasses}`} onClick={changeMode("edit")}/> 
             : event.isOrganizer && <PencilOff className={`${basicPencilClasses}`} onClick={changeMode("view")}/> }
             {mode==="view" 
-            ? <EventPageBody event={event} /> 
-            : <EditEventBody event={event} /> }
+            ? <EventPageBody event={event}/> 
+            : <EditEventBody event={event} changeMode={changeMode("view")}/> }
             
         </div>
     )

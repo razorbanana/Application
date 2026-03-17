@@ -7,6 +7,7 @@ const schema = yup.object().shape({
   location: yup.string().min(2, "Location must be at least 2 characters").max(64, "Location is too long").required("Location is required"),
   eventDate: yup.date().min(new Date(), "Event date must be in the future").required("Event date is required"),
   capacity: yup.number().optional().positive("Capacity must be positive").integer("Capacity must be an integer"),
+  tags: yup.array().of(yup.string()).max(5, "Up to 5 tags can be selected")
 })
 
 export const validateField = async (
@@ -17,6 +18,7 @@ export const validateField = async (
       location: string;
       eventDate: string;
       capacity: string;
+      tags: string
   }>>
   ,field: string, value: any) => {
     try {
@@ -26,3 +28,47 @@ export const validateField = async (
       setErrors(prev => ({ ...prev, [field]: err.message })) 
     }
   }
+
+  export const validateAll = async (
+  data: CreateEventRequestDto,
+  setErrors: React.Dispatch<
+    React.SetStateAction<{
+      name: string
+      description: string
+      location: string
+      eventDate: string
+      capacity: string
+      tags: string
+    }>
+  >
+) => {
+  try {
+    await schema.validate(data, { abortEarly: false })
+
+    setErrors({
+      name: "",
+      description: "",
+      location: "",
+      eventDate: "",
+      capacity: "",
+      tags: ""
+    })
+  } catch (err: any) {
+    const newErrors = {
+      name: "",
+      description: "",
+      location: "",
+      eventDate: "",
+      capacity: "",
+      tags: ""
+    }
+
+    err.inner.forEach((error: any) => {
+      if (error.path) {
+        newErrors[error.path as keyof typeof newErrors] = error.message
+      }
+    })
+
+    setErrors(newErrors)
+  }
+}

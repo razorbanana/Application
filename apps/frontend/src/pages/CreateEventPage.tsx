@@ -1,13 +1,15 @@
 import { useAppDispatch, useAppSelector } from "../app/store"
 import RowInput from "../components/formComponents/RowInput"
 import type { CreateEventRequestDto } from "../types/dtos/requests/CreateEventRequestDto"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { chooseEvent, createEvent } from "../app/slices/eventsSlice"
 import InputLabel from "../components/formComponents/InputLabel"
 import FormButton from "../components/formComponents/FormButton"
-import { validateField } from "../utils/validation/validateEvent"
+import { validateAll, validateField } from "../utils/validation/validateEvent"
 import { useNavigate } from "react-router"
-
+import TagSelector from "../components/commonComponents/tags/TagSelector"
+import type { TagName } from "../types/TagType"
+import { addDays } from "date-fns"
 
 export default function CreateEventPage(){
     const status = useAppSelector(state => state.events.status)
@@ -19,16 +21,22 @@ export default function CreateEventPage(){
         location: "",
         eventDate: "",
         capacity: "",
+        tags: ""
     })
     const hasNoErrors = Object.values(errors).every(err => err === "")
     const [data, setData] = useState<CreateEventRequestDto>({
         name: "",
         description: "",
         location: "",
-        eventDate: new Date(),
+        eventDate: addDays(new Date(), 1),
         capacity: 100,
         isPublic: true,
+        tags: []
     })
+
+    useEffect(()=>{
+        validateAll(data, setErrors)
+    }, [])
 
     const [date, setDate] = useState(() => {
         const d = new Date(data.eventDate)
@@ -43,6 +51,14 @@ export default function CreateEventPage(){
             [fieldName]: e.target.value
         })
         validateField(data, setErrors, fieldName, e.target.value)
+    }
+
+    const setChosenTags = (value: TagName[]) => {
+        setData(prev => ({
+            ...prev,
+            tags: value
+        }))
+        validateField(data, setErrors, "tags", value)
     }
 
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -103,6 +119,9 @@ export default function CreateEventPage(){
                     type="textarea"
                     error={errors.description}
                 />
+
+                <InputLabel label="Choose up to 5 tags for your event:" name="tags" optional={true}/>
+                <TagSelector selectedTags={data.tags} setSelectedTags={setChosenTags} error={errors.tags}/>
 
                 <div className="flex justify-between w-full">
                     <RowInput 

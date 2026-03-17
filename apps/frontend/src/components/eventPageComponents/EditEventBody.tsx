@@ -7,12 +7,17 @@ import RowInput from "../formComponents/RowInput"
 import FormButton from "../formComponents/FormButton"
 import InputLabel from "../formComponents/InputLabel"
 import { updateEvent } from "../../app/slices/eventsSlice"
+import { type TagName } from "../../types/TagType"
+import TagSelector from "../commonComponents/tags/TagSelector"
+import { validateAll } from "../../utils/validation/validateEvent"
+import { useEffect } from "react"
 
 type EditEventBodyProps = {
     event: EventType
+    changeMode: () => void
 }
 
-export default function EditEventBody ({event}: EditEventBodyProps) {
+export default function EditEventBody ({event, changeMode}: EditEventBodyProps) {
     const status = useAppSelector(state => state.events.status)
     const dispatch = useAppDispatch()
     const [errors, setErrors] = useState({
@@ -21,16 +26,22 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
         location: "",
         eventDate: "",
         capacity: "",
+        tags: ""
     })
     const hasNoErrors = Object.values(errors).every(err => err === "")
     const {id, ...eventBody} = event
     const [data, setData] = useState<CreateEventRequestDto>({
         ...eventBody,
-        eventDate: new Date(eventBody.eventDate)
+        eventDate: new Date(eventBody.eventDate),
+        tags: event.tags ? event.tags : []
     })
 
     const [date, setDate] = useState(data.eventDate.toISOString().slice(0, 10)) 
     const [time, setTime] = useState(data.eventDate.toTimeString().slice(0, 5))
+
+    useEffect(()=>{
+        validateAll(data, setErrors)
+    }, [])
 
     const handleInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setData({
@@ -38,6 +49,14 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
             [fieldName]: e.target.value
         })
         validateField(data, setErrors, fieldName, e.target.value)
+    }
+
+    const setChosenTags = (value: TagName[]) => {
+        setData(prev => ({
+            ...prev,
+            tags: value
+        }))
+        validateField(data, setErrors, "tags", value)
     }
 
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -60,9 +79,10 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
         validateField(data, setErrors, "eventDate", newDate)
     }
 
-    const handleUpdateEvent = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleUpdateEvent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        dispatch(updateEvent({id, data}))
+        await dispatch(updateEvent({id, data}))
+        changeMode()
     }
 
     const handlePublicChange = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>, visibility: boolean) => {
@@ -96,6 +116,9 @@ export default function EditEventBody ({event}: EditEventBodyProps) {
                     type="textarea"
                     error={errors.description}
                 />
+
+                <InputLabel label="Choose up to 5 tags for your event:" name="tags" optional={true}/>
+                <TagSelector selectedTags={data.tags} setSelectedTags={setChosenTags} error={errors.tags}/>
 
                 <div className="flex justify-between w-full">
                     <RowInput 

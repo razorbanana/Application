@@ -6,7 +6,8 @@ import { chooseEvent, joinEvent, leaveEvent, deleteEvent } from "../../app/slice
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import EventCardButton from "../commonComponents/EventCardButton";
-import ConfirmationModal from "../commonComponents/ConfirmationModal";
+import ConfirmationModal from "../commonComponents/confirmationModal/ConfirmationModal";
+import Tags from "../commonComponents/tags/Tags";
 
 export default function EventCard ({event}: {event: EventType}) {
     const dispatch = useAppDispatch()
@@ -35,13 +36,16 @@ export default function EventCard ({event}: {event: EventType}) {
 
     return (
         <div className="group h-full m-3 p-3 border-1 border-gray-300 rounded-lg flex flex-col" >
-            <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg cursor-pointer" onClick={openEvent}>{event.name}</p>
+            <p className="group-hover:text-blue-600 text-gray-900 font-bold text-lg cursor-pointer" onClick={openEvent}>
+                {event.name}
+            </p>
+            <Tags tags={event.tags} mode="icons"/>
             <p className="text-gray-600 mb-3">{event.description}</p>
             <p className="flex items-center text-gray-600"><Calendar className="w-4 h-4 mr-2"/> {datePart}</p>
             <p className="flex items-center text-gray-600"><Clock className="w-4 h-4 mr-2"/>{timePart}</p>
             <p className="flex items-center text-gray-600"><MapPin className="w-4 h-4 mr-2"/>{event.location}</p>
             <p className="flex items-center text-gray-600"><Users className="w-4 h-4 mr-2"/>{event.visitorCount} / {event.capacity}</p>
-            
+
             <ConfirmationModal isOpen={isOpen} setIsOpen={setIsOpen} handleDelete={handleDelete}/>
 
             <div className="mt-auto">
